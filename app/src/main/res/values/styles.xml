@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ButtonRed">
+        <item name="android:layout_width">177dp</item>
+        <item name="android:layout_height">49dp</item>
+        <item name="android:background">@drawable/button_red</item>
+        <item name="android:textColor">@color/white_red</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+    <style name="ButtonRedWrap">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/button_red</item>
+<!--        <item name="android:layout_marginHorizontal">15dp</item>-->
+        <item name="android:textColor">@color/white_red</item>
+    </style>
+
+    <style name="ButtonGreen">
+        <item name="android:layout_width">177dp</item>
+        <item name="android:layout_height">49dp</item>
+        <item name="android:background">@drawable/button_green</item>
+        <item name="android:textColor">@color/green_deeper</item>
+    </style>
+
+    <style name="ButtonFullGreen">
+        <item name="android:layout_width">177dp</item>
+        <item name="android:layout_height">49dp</item>
+        <item name="android:background">@drawable/button_full_green</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ImageButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TextViewBold">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#272729</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">24sp</item>
+
+    </style>
+
+    <style name="TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#39383C</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextViewLighter">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#808087</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ImageButtonReturnPage">
+<!--        app:srcCompat="?attr/homeAsUpIndicator"-->
+        <item name="android:background">@color/green</item>
+    </style>
+
+    <style name="Search">
+        <!--        <item name="android:layout_marginHorizontal">15dp</item>-->
+    </style>
+</resources>

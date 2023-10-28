@@ -6,4 +6,70 @@
     android:layout_height="match_parent"
     tools:context=".Controller.Customer.LoginActivity">
 
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="111dp"
+        android:layout_height="107dp"
+        tools:layout_editor_absoluteX="45dp"
+        tools:layout_editor_absoluteY="332dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="228dp"
+        tools:layout_editor_absoluteY="292dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/textView"
+        style="@style/TextViewBold"
+        android:text="TextView"
+
+        tools:layout_editor_absoluteX="45dp"
+        tools:layout_editor_absoluteY="198dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="64dp"
+        tools:layout_editor_absoluteY="445dp" />
+
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="185dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="465dp">
+
+        <Button
+            android:id="@+id/button"
+            style="@style/ButtonRedWrap"
+
+            android:text="Thêm vào giỏ" />
+
+        <EditText
+            android:id="@+id/editTextText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:textDecoration="none"
+            android:hint="Trang" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="72dp"
+        tools:layout_editor_absoluteY="30dp"
+        app:srcCompat="?attr/homeAsUpIndicator"
+
+        style="@style/ImageButtonReturnPage"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
