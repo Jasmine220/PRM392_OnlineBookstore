@@ -10,8 +10,44 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.OnlineBookstore"
+        android:theme="@style/BookTheme"
         tools:targetApi="31">
+        <activity
+            android:name=".Controller.Customer.ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Controller.Customer.MapActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Controller.Customer.NotificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Controller.Customer.OrderDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Controller.Customer.PaymentSuccessfulActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Controller.Customer.PaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Controller.Customer.ListBookActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Controller.Customer.CartActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Controller.Customer.HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Controller.Customer.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Controller.SignUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Controller.Customer.LoginActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
