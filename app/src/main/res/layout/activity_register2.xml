@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.144"
+        app:layout_constraintVertical_bias="0.08"
         app:srcCompat="@drawable/pngwing_com" />
 
     <TextView
@@ -34,28 +34,48 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.054" />
+        app:layout_constraintVertical_bias="0.023" />
+
+    <TextView
+        android:id="@+id/H1"
+        android:layout_width="333dp"
+        android:layout_height="48dp"
+        android:shadowColor="#000000"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="3"
+        android:text="Điền thông tin người dùng:"
+        android:textColor="#707570"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.272" />
 
     <EditText
-        android:id="@+id/Username"
+        android:id="@+id/Email"
         android:layout_width="331dp"
         android:layout_height="69dp"
         android:ems="10"
-        android:hint="Tên Tài Khoản"
+        android:hint="Email"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.462"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.353" />
 
     <EditText
-        android:id="@+id/Password"
+        android:id="@+id/Name"
         android:layout_width="330dp"
         android:layout_height="72dp"
         android:ems="10"
-        android:hint="Mật Khẩu"
-        android:inputType="textPassword"
+        android:hint="Tên Người Dùng"
+        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.46"
@@ -64,66 +84,30 @@
         app:layout_constraintVertical_bias="0.483" />
 
     <EditText
-        android:id="@+id/RePassword"
+        android:id="@+id/SốĐiệnThoại"
         android:layout_width="330dp"
         android:layout_height="72dp"
         android:ems="10"
-        android:hint="Xác Nhận Mật Khẩu"
-        android:inputType="textPassword"
+        android:hint="Số Điện Thoại"
+        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintHorizontal_bias="0.456"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.632" />
+        app:layout_constraintVertical_bias="0.64" />
 
     <Button
         android:id="@+id/LoginButton"
         android:layout_width="331dp"
         android:layout_height="69dp"
         android:background="@drawable/rounded_button"
-        android:text="Đăng Kí"
+        android:text="Hoàn Tất Đăng Kí"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.467"
+        app:layout_constraintHorizontal_bias="0.462"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.832" />
-
-    <TextView
-        android:id="@+id/QA"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Bạn đã có tài khoản?"
-        android:textColor="#898F89"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.896" />
-
-    <TextView
-        android:id="@+id/Login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Đăng Nhập ngay với Bakasa"
-        android:textColor="#3F51B5"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.938" />
-
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tôi đồng ý với các điều khoản của Bakasa"
-        android:textColor="#3F51B5"
-        android:textStyle="bold"
-        tools:layout_editor_absoluteX="31dp"
-        tools:layout_editor_absoluteY="551dp" />
+        app:layout_constraintVertical_bias="0.814" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
