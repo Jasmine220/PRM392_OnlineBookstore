@@ -37,7 +37,7 @@
     <style name="TextViewBold">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">#272729</item>
+        <item name="android:textColor">@color/black_1</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">24sp</item>
 
@@ -46,14 +46,14 @@
     <style name="TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">#39383C</item>
+        <item name="android:textColor">@color/black_2</item>
         <item name="android:textSize">20sp</item>
     </style>
 
     <style name="TextViewLighter">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">#808087</item>
+        <item name="android:textColor">@color/lightgray</item>
         <item name="android:textSize">20sp</item>
     </style>
 
