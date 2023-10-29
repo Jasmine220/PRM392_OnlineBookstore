@@ -43,9 +43,6 @@
             android:name=".Controller.Customer.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".Controller.SignUpActivity"
-            android:exported="false" />
-        <activity
             android:name=".Controller.Customer.LoginActivity"
             android:exported="false" />
         <activity
