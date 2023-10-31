@@ -2,6 +2,7 @@ package com.example.onlinebookstore.Controller.Customer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -18,6 +19,8 @@ import com.example.onlinebookstore.R;
 import com.example.onlinebookstore.Request.RegisterRequest;
 import com.example.onlinebookstore.Response.LoginResponse;
 import com.example.onlinebookstore.Service.ApiService;
+
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,6 +51,8 @@ public class RegisterActivity2 extends AppCompatActivity {
 
                 if (!isValidate(email)) {
                     showToast("Please input a valid email address.");
+                } else if (!isValidPhoneNumber(phone)) {
+                    showToast("Please input phone with 10 number");
                 } else {
                     // Create an instance of the ApiService
                     ApiService apiService = ApiClient.getClient().create(ApiService.class);
@@ -94,6 +99,11 @@ public class RegisterActivity2 extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+    boolean isValidPhoneNumber(String phone) {
+        // Kiểm tra xem số điện thoại có đúng định dạng và độ dài là 10 không
+        String phonePattern = "^[0-9]{10}$";
+        return !TextUtils.isEmpty(phone) && Pattern.matches(phonePattern, phone);
     }
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
