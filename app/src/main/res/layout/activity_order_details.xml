@@ -151,29 +151,6 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="202dp">
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="357dp"
-                android:layout_height="52dp"
-                android:text=" Mã Đơn Hàng : C0985464"
-                android:textColor="#575656"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="4dp"
-                android:text="  Thông tin đơn hàng :"
-                android:textColor="#7C7A7A"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="374dp"
                 android:layout_height="275dp"
@@ -185,46 +162,93 @@
                     android:id="@+id/textView6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="24dp"
                     android:text="Vượt Bẫy Cảm xúc"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.016" />
+                    app:layout_constraintVertical_bias="0.612" />
 
                 <TextView
                     android:id="@+id/textView7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="24dp"
                     android:text="Giá:150.000"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.173" />
+                    app:layout_constraintVertical_bias="0.721" />
 
                 <ImageView
                     android:id="@+id/imageView3"
                     android:layout_width="148dp"
                     android:layout_height="82dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="4dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.787"
                     app:srcCompat="@drawable/sach" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="357dp"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="16dp"
+                    android:text=" Mã Đơn Hàng : C0985464"
+                    android:textColor="#575656"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.47"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:text="  Thông tin đơn hàng :"
+                    android:textColor="#7C7A7A"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="384dp"
+                    android:layout_height="1dp"
+                    android:background="#AAA8A8" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="384dp"
-                android:layout_height="1dp"
-                android:background="#AAA8A8"
-                tools:layout_editor_absoluteX="4dp"
-                tools:layout_editor_absoluteY="0dp" />
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="178dp"
+                android:layout_height="51dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:text="Địa Chỉ : Thôn 3, Hoàng Thương, Khanh Ba, Phú Thọ"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="11dp"
+                android:text="Thời gian đặt hàng : 0:10, 04/11/2023"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
