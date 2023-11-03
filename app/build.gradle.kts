@@ -43,4 +43,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("com.squareup.retrofit2:retrofit:2.0.2")
     implementation("com.squareup.retrofit2:converter-gson:2.0.2")
+    implementation("io.socket:socket.io-client:1.0.1") {
+        exclude(group = "org.json", module = "json")
+    }
 }

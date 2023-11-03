@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.example.onlinebookstore.Fragment.CartFragment;
 import com.example.onlinebookstore.Fragment.ChatFragment;
@@ -22,7 +24,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        Intent intent = getIntent();
+        int customerId = intent.getIntExtra("accountId", 0);
+        // Tạo ChatFragment và truyền customerId vào đó
+        ChatFragment chatFragment = new ChatFragment();
+        chatFragment.setCustomerId(customerId);
         replaceFragment(new HomeFragment());//default display when run app
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {

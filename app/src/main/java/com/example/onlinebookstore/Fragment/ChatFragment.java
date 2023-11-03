@@ -3,12 +3,24 @@ package com.example.onlinebookstore.Fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.onlinebookstore.ChatAdapter;
+import com.example.onlinebookstore.Models.Message;
 import com.example.onlinebookstore.R;
+
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.socket.client.Socket;
+import io.socket.client.IO;
+import io.socket.emitter.Emitter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,50 +29,82 @@ import com.example.onlinebookstore.R;
  */
 public class ChatFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private RecyclerView recyclerView;
+    private ChatAdapter chatAdapter;
+    private List<Message> messages;
+    private Socket mSocket; // Đối tượng Socket.io
+    private int customerId; // Lấy từ Intent hoặc từ nơi nào đó
+    private int sellerId = 4; // Đây là sellerId (ví dụ: 4)
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
     public ChatFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ChatFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ChatFragment newInstance(String param1, String param2) {
+    public static ChatFragment newInstance() {
         ChatFragment fragment = new ChatFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        messages = new ArrayList<>();
+        chatAdapter = new ChatAdapter(messages, requireContext());
+
+        try {
+            mSocket = IO.socket("http://192.168.0.3");
+            mSocket.connect();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
+
+        mSocket.on("newMessage", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                final String receivedMessage = args[0].toString();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Xử lý khi có tin nhắn mới đến
+                        // Thêm tin nhắn vào danh sách và cập nhật RecyclerView
+                        Message message = new Message();
+                        message.setMessageContent(receivedMessage);
+                        message.setCustomerId((long) customerId);
+                        message.setSellerId(sellerId);
+                        messages.add(message);
+                        chatAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
+        Message messageToSend = new Message();
+        messageToSend.setMessageContent("Nội dung tin nhắn");
+        messageToSend.setCustomerId((long) customerId);
+        messageToSend.setSellerId(sellerId);
+
+// Gửi tin nhắn bằng Socket.io
+        mSocket.emit("sendMessage", messageToSend);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_chat, container, false);
+        recyclerView = view.findViewById(R.id.recyclerViewChat);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setAdapter(chatAdapter);
+
+        return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Ngắt kết nối Socket.io khi fragment bị hủy
+        if (mSocket != null) {
+            mSocket.disconnect();
+            mSocket.off("newMessage");
+        }
     }
 }
