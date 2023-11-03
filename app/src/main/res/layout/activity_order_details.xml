@@ -158,8 +158,9 @@
                 android:text=" Mã Đơn Hàng : C0985464"
                 android:textColor="#575656"
                 android:textSize="24sp"
-                tools:layout_editor_absoluteX="2dp"
-                tools:layout_editor_absoluteY="1dp" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView3"
