@@ -250,6 +250,20 @@
             tools:layout_editor_absoluteX="222dp"
             tools:layout_editor_absoluteY="597dp" />
 
+        <Button
+            android:id="@+id/Button"
+            android:layout_width="332dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="62dp"
+            android:background="@drawable/rounded_button"
+            android:text="Tiếp Tục Mua Sắm"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.489"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view5"
+            app:layout_constraintVertical_bias="0.0" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
