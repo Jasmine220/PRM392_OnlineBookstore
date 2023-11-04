@@ -7,4 +7,16 @@ public class Author {
 
     private String authorName;
     private Collection<Book> books;
+
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public Collection<Book> getBooks() {
+        return books;
+    }
 }
