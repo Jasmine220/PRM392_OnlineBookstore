@@ -37,7 +37,7 @@
             android:name=".Controller.Customer.CartActivity"
             android:exported="false" />
         <activity
-            android:name=".Controller.Customer.HomeActivity"
+            android:name=".Controller.Customer.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".Controller.Customer.RegisterActivity"
@@ -50,7 +50,7 @@
             android:exported="true"
             />
         <activity
-            android:name=".Controller.Customer.LoginActivity"
+            android:name=".Controller.Customer.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
