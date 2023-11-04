@@ -16,8 +16,9 @@
         android:theme="@style/BookTheme"
         tools:targetApi="31">
         <activity
-            android:name=".Controller.Customer.LoginActivity"
-            android:exported="true" />
+
+            android:name=".Controller.Customer.ChatActivity"
+            android:exported="true"/>
         <activity
             android:name=".Controller.Customer.MapActivity"
             android:exported="false" />
@@ -53,7 +54,7 @@
             android:exported="true"
             />
         <activity
-            android:name=".Controller.Customer.ChatActivity"
+            android:name=".Controller.Customer.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

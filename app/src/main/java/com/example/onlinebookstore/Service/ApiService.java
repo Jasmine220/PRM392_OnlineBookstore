@@ -12,6 +12,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface ApiService {
     // Đăng nhập
@@ -23,4 +24,9 @@ public interface ApiService {
     Call<List<Account>> getAllAccounts();
     @POST("send")
     Call<Void> sendMessage(@Body Message message);
+    @GET("messages")
+    Call<List<Message>> getChatMessages(
+            @Query("customerId") Long customerId,
+            @Query("sellerId") int sellerId
+    );
 }

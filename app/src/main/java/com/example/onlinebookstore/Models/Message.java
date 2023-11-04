@@ -3,7 +3,6 @@ package com.example.onlinebookstore.Models;
 import java.util.Date;
 
 public class Message {
-    private int messageId;
     private Long customerId;
     private String messageContent;
     private Date messageDatetime;
@@ -11,13 +10,6 @@ public class Message {
 
     // Các phương thức getter và setter ở đây
 
-    public int getMessageId() {
-        return messageId;
-    }
-
-    public void setMessageId(int messageId) {
-        this.messageId = messageId;
-    }
 
     public Long getCustomerId() {
         return customerId;

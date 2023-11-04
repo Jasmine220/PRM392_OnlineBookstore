@@ -45,21 +45,20 @@ public class ChatActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    private int customerId = 2; // Lấy từ Intent hoặc từ nơi nào đó
+    private int customerId; // Lấy từ Intent hoặc từ nơi nào đó
     private int sellerId = 4; // Đây là sellerId (ví dụ: 4)
     private EditText editTextMessage;
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
-//        customerId = getIntent().getIntExtra("customerId", 0);
-
+        customerId = getIntent().getIntExtra("customerId", 0);
+        int sellId = getIntent().getIntExtra("sellerId", 0);
+        if(sellId == 4) customerId = 2;
+        Log.d("ChatActivity", "customerId: " + customerId);
+        getChatMessages();
         recyclerView = findViewById(R.id.recyclerViewChat);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -147,14 +146,19 @@ public class ChatActivity extends AppCompatActivity {
 
     private void saveMessageToServer(Message message) {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-
+        Message messageWithoutDatetime = new Message();
+        messageWithoutDatetime.setCustomerId(message.getCustomerId());
+        messageWithoutDatetime.setSellerId(message.getSellerId());
+        messageWithoutDatetime.setMessageContent(message.getMessageContent());
         // Sử dụng Retrofit để gọi API /send
-        Call<Void> call = apiService.sendMessage(message);
+        Call<Void> call = apiService.sendMessage(messageWithoutDatetime);
+
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     // Xử lý khi API /send thành công
+                    showToast("Send Success");
                 } else {
                     showToast("Send failed");
                 }
@@ -166,7 +170,34 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+    private void getChatMessages() {
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
+        Call<List<Message>> call = apiService.getChatMessages((long) customerId, sellerId);
+        Log.d("ChatActivity", "customerId" + customerId);
+        Log.d("ChatActivity", "sellerId" + sellerId);
+        call.enqueue(new Callback<List<Message>>() {
+            @Override
+            public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
+                if (response.isSuccessful()) {
+                    List<Message> chatHistory = response.body();
+                    // Hiển thị lịch sử chat trong RecyclerView
+                    messages.addAll(chatHistory);
+                    chatAdapter.notifyDataSetChanged();
+                    Log.d("ChatActivity", "Chat history loaded successfully");
+                } else {
+                    Log.e("ChatActivity", "Failed to retrieve chat history. Response code: " + response.code());
+                    showToast("Failed to retrieve chat history");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Message>> call, Throwable t) {
+                Log.e("ChatActivity", "Failed to connect to chat API. Error: " + t.getMessage());
+                showToast("Failed to connect to chat API");
+            }
+        });
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

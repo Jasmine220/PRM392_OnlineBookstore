@@ -21,16 +21,14 @@ import com.example.onlinebookstore.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
-    private int customerId;
+    private int accountId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Intent intent = getIntent();
-        customerId = intent.getIntExtra("accountId", 0);
-        ChatActivity chatActivity = new ChatActivity();
-        chatActivity.setCustomerId(customerId);
+        accountId = intent.getIntExtra("accountId", 0);
         // Tạo ChatFragment và truyền customerId vào đó
         replaceFragment(new HomeFragment());//default display when run app
 
@@ -64,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.navigation_chat){
             Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+            if (accountId == 4) {
+                intent.putExtra("sellerId", accountId);
+            } else {
+                intent.putExtra("customerId", accountId);
+            }
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
