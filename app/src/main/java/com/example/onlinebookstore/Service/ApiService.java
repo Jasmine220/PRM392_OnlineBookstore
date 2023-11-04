@@ -1,6 +1,7 @@
 package com.example.onlinebookstore.Service;
 
 import com.example.onlinebookstore.Models.Account;
+import com.example.onlinebookstore.Models.Book;
 import com.example.onlinebookstore.Request.LoginRequest;
 import com.example.onlinebookstore.Request.RegisterRequest;
 import com.example.onlinebookstore.Response.LoginResponse;
@@ -20,4 +21,10 @@ public interface ApiService {
     Call<LoginResponse> register(@Body RegisterRequest registerRequest);
     @GET("list")
     Call<List<Account>> getAllAccounts();
+    // Book List
+    @GET("books")
+    Call<List<Book>> getAllBooks();
+    @GET("books/:bookId")
+    Call<Book> getBookDetail(int bookId);
+
 }
