@@ -1,5 +1,7 @@
 package com.example.onlinebookstore.Models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Collection;
 
 public class Book {
@@ -10,7 +12,7 @@ public class Book {
     private String bookDescription;
 
     private String bookTitle;
-
+    @SerializedName("bookImage")
     private String bookImage;
 
     private int bookPageNumber;
