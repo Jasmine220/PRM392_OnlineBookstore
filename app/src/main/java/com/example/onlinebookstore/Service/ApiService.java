@@ -12,6 +12,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface ApiService {
     // Đăng nhập
@@ -22,9 +23,9 @@ public interface ApiService {
     @GET("list")
     Call<List<Account>> getAllAccounts();
     // Book List
-    @GET("books")
+    @GET("api/books")
     Call<List<Book>> getAllBooks();
-    @GET("books/:bookId")
-    Call<Book> getBookDetail(int bookId);
+    @GET("api/books/{bookId}")
+    Call<Book> getBookDetail(@Path("bookId") int bookId);
 
 }
