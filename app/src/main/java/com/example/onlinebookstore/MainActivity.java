@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.onlinebookstore.Fragment.CartFragment;
 import com.example.onlinebookstore.Fragment.ChatFragment;
@@ -22,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        int accountId = getIntent().getIntExtra("accountId", 0);
+        Log.d("Account", "accountId" + accountId);
         replaceFragment(new HomeFragment());//default display when run app
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
