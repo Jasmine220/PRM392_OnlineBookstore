@@ -22,12 +22,12 @@ public class OrderDetailsActivity extends AppCompatActivity {
         TextView orderTimeTextView = findViewById(R.id.textView12);
 
         // Lấy dữ liệu sản phẩm từ nguồn dữ liệu (điều này cần được triển khai)
-        String productName = "Tên sản phẩm"; // Thay bằng dữ liệu thực tế
-        String productPrice = "Giá sản phẩm"; // Thay bằng dữ liệu thực tế
+        String productName = "Vượt Bẫy Cảm Xúc:"; // Thay bằng dữ liệu thực tế
+        String productPrice = "Giá:150.000đ"; // Thay bằng dữ liệu thực tế
         String orderStatus = "Trạng thái đơn hàng"; // Thay bằng dữ liệu thực tế
-        String orderNumber = "Mã đơn hàng"; // Thay bằng dữ liệu thực tế
-        String address = "Địa chỉ giao hàng"; // Thay bằng dữ liệu thực tế
-        String orderTime = "Thời gian đặt hàng"; // Thay bằng dữ liệu thực tế
+        String orderNumber = "Mã Đơn Hàng : C0985464"; // Thay bằng dữ liệu thực tế
+        String address = "Địa Chỉ : Thôn 3, Hoàng Thương, Khanh Ba, Phú Thọ"; // Thay bằng dữ liệu thực tế
+        String orderTime = "Thời gian đặt hàng : 0:10, 04/11/2023"; // Thay bằng dữ liệu thực tế
 
         // Cập nhật các TextView với dữ liệu từ nguồn dữ liệu
         productNameTextView.setText(productName);
