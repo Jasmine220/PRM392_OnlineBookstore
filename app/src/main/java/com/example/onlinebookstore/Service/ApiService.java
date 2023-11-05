@@ -25,7 +25,5 @@ public interface ApiService {
     // Book List
     @GET("api/books")
     Call<List<Book>> getAllBooks();
-    @GET("api/books/{bookId}")
-    Call<Book> getBookDetail(@Path("bookId") int bookId);
 
 }
