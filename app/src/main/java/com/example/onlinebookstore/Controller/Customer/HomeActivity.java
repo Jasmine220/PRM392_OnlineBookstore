@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import androidx.appcompat.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.onlinebookstore.Client.ApiClient;
@@ -26,6 +28,7 @@ import retrofit2.Response;
 public class HomeActivity extends AppCompatActivity {
     RecyclerView rv_bookList;
     BookListAdapter rvBookListAdapter;
+    private SearchView searchView;
     ArrayList<Book> books;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +45,27 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.bottom_nav_menu,menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        // Set up the query text listener here
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                rvBookListAdapter.getFilter().filter(query);
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                rvBookListAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         return true;
     }
+
 
     public void populateBooks() {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
