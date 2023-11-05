@@ -49,6 +49,8 @@
             android:name=".MainActivity"
             android:exported="true"
             />
+        <activity android:name=".Controller.Customer.BookDetailsActivity"
+            android:exported="true"/>
         <activity
             android:name=".Controller.Customer.HomeActivity"
             android:exported="true">
