@@ -4,37 +4,79 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.onlinebookstore.Client.ApiClient;
+import com.example.onlinebookstore.Models.Order;
 import com.example.onlinebookstore.R;
+import com.example.onlinebookstore.Service.ApiService;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OrderDetailsActivity extends AppCompatActivity {
+    TextView productNameTextView;
+    TextView productPriceTextView;
+    TextView orderStatusTextView;
+    TextView orderNumberTextView;
+    TextView addressTextView;
+    TextView orderTimeTextView;
+    ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_details);
+
         // Lấy các TextView từ layout
-        TextView productNameTextView = findViewById(R.id.textView6);
-        TextView productPriceTextView = findViewById(R.id.textView7);
-        TextView orderStatusTextView = findViewById(R.id.status);
-        TextView orderNumberTextView = findViewById(R.id.textView4);
-        TextView addressTextView = findViewById(R.id.textView11);
-        TextView orderTimeTextView = findViewById(R.id.textView12);
+        productNameTextView = findViewById(R.id.textView6);
+        productPriceTextView = findViewById(R.id.textView7);
+        orderStatusTextView = findViewById(R.id.status);
+        orderNumberTextView = findViewById(R.id.textView4);
+        addressTextView = findViewById(R.id.textView11);
+        orderTimeTextView = findViewById(R.id.textView12);
 
-        // Lấy dữ liệu sản phẩm từ nguồn dữ liệu (điều này cần được triển khai)
-        String productName = "Vượt Bẫy Cảm Xúc:"; // Thay bằng dữ liệu thực tế
-        String productPrice = "Giá:150.000đ"; // Thay bằng dữ liệu thực tế
-        String orderStatus = "Trạng thái đơn hàng"; // Thay bằng dữ liệu thực tế
-        String orderNumber = "Mã Đơn Hàng : C0985464"; // Thay bằng dữ liệu thực tế
-        String address = "Địa Chỉ : Thôn 3, Hoàng Thương, Khanh Ba, Phú Thọ"; // Thay bằng dữ liệu thực tế
-        String orderTime = "Thời gian đặt hàng : 0:10, 04/11/2023"; // Thay bằng dữ liệu thực tế
+        // Khởi tạo ApiService
+        apiService = ApiClient.getClient().create(ApiService.class);
 
-        // Cập nhật các TextView với dữ liệu từ nguồn dữ liệu
-        productNameTextView.setText(productName);
-        productPriceTextView.setText(productPrice);
-        orderStatusTextView.setText(orderStatus);
-        orderNumberTextView.setText(orderNumber);
-        addressTextView.setText(address);
-        orderTimeTextView.setText(orderTime);
+        // Thực hiện cuộc gọi API để lấy dữ liệu đơn hàng
+        fetchOrderDetails();
+    }
+
+    private void fetchOrderDetails() {
+        int orderId = 4;
+        Call<Order> call = apiService.getOrder(orderId);
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Order order = response.body();
+                    String status ="";
+                    if (order.getOrderStatusId() == 1){
+                        status = "Chưa thanh toán";
+                    }
+                    // Cập nhật TextView với dữ liệu từ đơn hàng
+                    productNameTextView.setText("Tên sản phẩm: ");
+                    productPriceTextView.setText("Giá sản phẩm: " + order.getOrderDetailsList().get(orderId).getUnit_price());
+                    orderStatusTextView.setText("Trạng thái đơn hàng: " + status);
+                    orderNumberTextView.setText("Mã Đơn Hàng: " + order.getOrderId());
+                    addressTextView.setText("Địa chỉ: " + order.getAddress());
+                    orderTimeTextView.setText("Thời gian đặt hàng: " + order.getOrderDatetime());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                // Xử lý lỗi kết nối hoặc lỗi mạng ở đây
+                showToast("Failed to fetch order details. Please check your network connection.");
+            }
+        });
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
