@@ -14,25 +14,29 @@
             android:layout_width="150dp"
             android:layout_height="200dp"
             android:layout_gravity="center_horizontal"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/pngwing_com"/>
 
         <TextView
             android:id="@+id/book_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
+            android:text="Hai dua tre"
             android:layout_marginTop="16dp" />
 
         <TextView
             android:id="@+id/book_author"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Thach Lam"
             android:layout_marginTop="8dp" />
 
         <TextView
             android:id="@+id/book_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="80000"
             android:layout_marginTop="8dp" />
 
         <TextView
