@@ -46,9 +46,15 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
                 Intent intent = new Intent(context, BookDetailsActivity.class);
                 intent.putExtra("Title", book.getBookTitle());
                 intent.putExtra("Author", formatAuthors(book.getAuthors()));
-                intent.putExtra("Price", book.getBookPrice());
+                intent.putExtra("Price", String.valueOf(book.getBookPrice()));
                 intent.putExtra("Description", book.getBookDescription());
                 intent.putExtra("Image", book.getBookImage());
+                intent.putExtra("book_page_number", String.valueOf(book.getBookPageNumber()));
+                intent.putExtra("book_cover_type", book.getBookCoverType());
+                intent.putExtra("supplier_name", book.getSupplier().getSupplierName());
+                intent.putExtra("publisher_name", book.getPublisher().getPublisherName());
+                intent.putExtra("category_name", book.getCategory().getCategoryName());
+                intent.putExtra("book_quantity", book.getBookQuantity());
                 context.startActivity(intent);
             }
         });
