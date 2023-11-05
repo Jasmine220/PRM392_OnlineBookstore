@@ -45,4 +45,6 @@ dependencies {
     implementation("com.google.android.libraries.places:places:3.1.0")
     implementation("com.squareup.retrofit2:retrofit:2.0.2")
     implementation("com.squareup.retrofit2:converter-gson:2.0.2")
+    implementation("com.squareup.picasso:picasso:2.71828")
+    implementation("androidx.gridlayout:gridlayout:1.0.0")
 }

@@ -1,16 +1,22 @@
 package com.example.onlinebookstore.Service;
 
 import com.example.onlinebookstore.Models.Account;
+import com.example.onlinebookstore.Models.CartDetail;
+import com.example.onlinebookstore.Request.CartDetailRequest;
 import com.example.onlinebookstore.Request.LoginRequest;
 import com.example.onlinebookstore.Request.RegisterRequest;
+import com.example.onlinebookstore.Response.CartDetailResponse;
 import com.example.onlinebookstore.Response.LoginResponse;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Query;
 
 public interface ApiService {
     // Đăng nhập
@@ -20,4 +26,13 @@ public interface ApiService {
     Call<LoginResponse> register(@Body RegisterRequest registerRequest);
     @GET("list")
     Call<List<Account>> getAllAccounts();
+    @GET("api/v1/cart-detail/")
+    Call<List<CartDetailResponse>> getCartByCustomer(@Query("CustomerId") int customerId);
+    @PUT("api/v1/cart-detail/")
+    Call<CartDetail> updateCartDetail(@Query("cartDetailId") long cartDetailId, @Query("amount") long amount);
+    @POST("api/v1/cart-detail/")
+    Call<CartDetail> createCartDetail(@Body CartDetailRequest request);
+    @DELETE("api/v1/cart-detail/")
+    Call<Void> deleteCartDetail(@Query("cartDetailId") long cartDetailId);
+
 }
