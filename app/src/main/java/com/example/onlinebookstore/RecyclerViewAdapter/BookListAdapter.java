@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,13 +22,15 @@ import com.example.onlinebookstore.R;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHolder> {
+public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHolder> implements Filterable {
     Context context;
     ArrayList<Book> books;
+    ArrayList<Book> booksFilter;
 
     public BookListAdapter(Context context, ArrayList<Book> books) {
         this.context = context;
         this.books = books;
+        this.booksFilter = books;
     }
 
     @NonNull
@@ -46,7 +50,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
                 Intent intent = new Intent(context, BookDetailsActivity.class);
                 intent.putExtra("Title", book.getBookTitle());
                 intent.putExtra("Author", formatAuthors(book.getAuthors()));
-                intent.putExtra("Price", String.valueOf(book.getBookPrice()));
+                intent.putExtra("Price", String.valueOf((int)book.getBookPrice()) + " đ");
                 intent.putExtra("Description", book.getBookDescription());
                 intent.putExtra("Image", book.getBookImage());
                 intent.putExtra("book_page_number", String.valueOf(book.getBookPageNumber()));
@@ -54,7 +58,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
                 intent.putExtra("supplier_name", book.getSupplier().getSupplierName());
                 intent.putExtra("publisher_name", book.getPublisher().getPublisherName());
                 intent.putExtra("category_name", book.getCategory().getCategoryName());
-                intent.putExtra("book_quantity", book.getBookQuantity());
+                intent.putExtra("book_quantity", String.valueOf(book.getBookQuantity()));
                 context.startActivity(intent);
             }
         });
@@ -76,7 +80,38 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
+        if(books == null) return 0;
         return books.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String strSearch = charSequence.toString();
+                if(strSearch.isEmpty()){
+                    books = booksFilter;
+                } else {
+                    ArrayList<Book> bookModelList = new ArrayList<>();
+                    for (Book book : booksFilter) {
+                        if(book.getBookTitle().toLowerCase().contains(strSearch.toLowerCase())){
+                            bookModelList.add(book);
+                        }
+                    }
+                    books = bookModelList;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = books;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                books = (ArrayList<Book>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -95,7 +130,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
             title.setText(book.getBookTitle());
             // Assuming getAuthors() returns a collection of authors, you may want to format it properly.
             author.setText(formatAuthors(book.getAuthors()));
-            price.setText(String.valueOf(book.getBookPrice()));
+            price.setText(String.valueOf((int)book.getBookPrice()) + " đ");
             Glide.with(context).load(book.getBookImage()).into(image);
         }
     }
