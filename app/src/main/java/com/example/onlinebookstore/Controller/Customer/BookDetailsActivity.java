@@ -1,13 +1,19 @@
 package com.example.onlinebookstore.Controller.Customer;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.onlinebookstore.R;
+
+import java.util.Objects;
 
 public class BookDetailsActivity extends AppCompatActivity {
 
@@ -15,6 +21,13 @@ public class BookDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
+
+        // calling the action bar
+        ActionBar actionBar = getSupportActionBar();
+
+        // showing the back button in action bar
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         String title = getIntent().getStringExtra("Title");
         String author = getIntent().getStringExtra("Author");
         String price = getIntent().getStringExtra("Price");
@@ -57,5 +70,16 @@ public class BookDetailsActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.bottom_nav_menu,menu);
         return true;
+    }
+    // this event will enable the back
+    // function to the button on press
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
