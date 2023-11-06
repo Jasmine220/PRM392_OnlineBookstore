@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.example.onlinebookstore.Controller.Customer.ChatActivity;
 import com.example.onlinebookstore.Fragment.CartFragment;
-import com.example.onlinebookstore.Fragment.ChatFragment;
 import com.example.onlinebookstore.Fragment.HomeFragment;
 import com.example.onlinebookstore.Fragment.PersonFragment;
 import com.example.onlinebookstore.databinding.ActivityMainBinding;
