@@ -64,7 +64,11 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<LoginResponse> call, Throwable t) {
                         // Xử lý lỗi kết nối hoặc lỗi mạng ở đây
-                        showToast("Login failed. Please check your network connection.");
+                        String errorMessage = "Login failed. Please check your network connection.";
+                        if (t.getMessage() != null) {
+                            errorMessage = "Login failed. Error: " + t.getMessage();
+                        }
+                        showToast(errorMessage);
                     }
                 });
             }
