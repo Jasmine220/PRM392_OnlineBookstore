@@ -1,42 +1,43 @@
 package com.example.onlinebookstore.Models;
 
 public class CartDetail {
-    private Long id;
+    private Long cartDetailsId;
 
-    private Long userId;
-    private Long bookId;
+    private int customerId;
 
-    private int amount;
+    private int bookId;
 
-    public Long getId() {
-        return id;
+    private int quantity;
+
+    public Long getCartDetailsId() {
+        return cartDetailsId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCartDetailsId(Long cartDetailsId) {
+        this.cartDetailsId = cartDetailsId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public int getCustomerId() {
+        return customerId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
-    public Long getBookId() {
+    public int getBookId() {
         return bookId;
     }
 
-    public void setBookId(Long bookId) {
+    public void setBookId(int bookId) {
         this.bookId = bookId;
     }
 
-    public int getAmount() {
-        return amount;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

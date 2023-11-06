@@ -14,15 +14,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#4CAF50"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme" />
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            android:id="@+id/toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="#4CAF50"-->
+<!--            android:minHeight="?attr/actionBarSize"-->
+<!--            android:theme="?attr/actionBarTheme" />-->
 
         <LinearLayout
+            android:id="@+id/TopBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -44,6 +45,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#80F1F3F4"
+        android:paddingTop="55dp"
+        android:paddingBottom="55dp"
         app:layout_column="0"
         app:layout_constraintTop_toBottomOf="@id/AppBarLayout"
         app:layout_constraintStart_toStartOf="parent"

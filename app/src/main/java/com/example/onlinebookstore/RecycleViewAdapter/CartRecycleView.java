@@ -1,6 +1,7 @@
 package com.example.onlinebookstore.RecycleViewAdapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +27,16 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyViewHolder>{
     List<CartDetailResponse> cartDetailList;
     Context context;
     ApiService apiService;
     List<Boolean> checkList = new ArrayList<>();
+    List<CartDetailResponse> chosenList = new ArrayList<>();
     public CartRecycleView( Context context, List<CartDetailResponse> cartDetailList){
         this.cartDetailList = cartDetailList;
         this.context = context;
@@ -65,16 +71,19 @@ public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyView
         holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
             checkList.set(position, b);
         });
+        if(checkList.get(position) == true){
+            chosenList.add(cartDetail);
+        }else{
+            if(chosenList.contains(cartDetail)){
+                chosenList.remove(position);
+            }
+        }
 
         holder.plusBtn.setOnClickListener(view -> {
             cartDetail.setAmount(cartDetail.getAmount() + 1);
             cartDetailList.set(position, cartDetail);
             notifyDataSetChanged();
-            Executor executor = Executors.newSingleThreadExecutor();
-            executor.execute(() -> {
-                    apiService.updateCartDetail(cartDetail.getCartDetailId(), cartDetail.getAmount());
-            });
-
+            updateItem(cartDetail);
         });
 
         holder.subBtn.setOnClickListener(view -> {
@@ -84,10 +93,7 @@ public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyView
                 cartDetail.setAmount(cartDetail.getAmount() - 1);
                 cartDetailList.set(position, cartDetail);
                 notifyDataSetChanged();
-                Executor executor = Executors.newSingleThreadExecutor();
-                executor.execute(() -> {
-                    apiService.updateCartDetail(cartDetail.getCartDetailId(), cartDetail.getAmount());
-                });
+               updateItem(cartDetail);
             }
         });
 
@@ -100,13 +106,46 @@ public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyView
 
     }
 
+    public List<CartDetailResponse> getChosenList() {
+        return chosenList;
+    }
+
+    void updateItem(CartDetailResponse cartDetail){
+        Call<CartDetail> call = apiService.updateCartDetail(cartDetail.getCartDetailId(), cartDetail.getAmount());
+        call.enqueue(new Callback<CartDetail>() {
+            @Override
+            public void onResponse(Call<CartDetail> call, Response<CartDetail> response) {
+                CartDetail response1 = response.body();
+                Log.d("CartUpdate", "successful");
+                Log.d("CartUpdate", "cartDetail: CartDetailId" + response1.getCartDetailsId() + ", amount: " +response1.getQuantity());
+            }
+
+            @Override
+            public void onFailure(Call<CartDetail> call, Throwable t) {
+                Log.e("CartUpdate", "error: " + t.getMessage());
+                t.printStackTrace();
+
+            }
+        });
+    }
+
     void deleteItem(CartDetailResponse cartDetail){
         cartDetailList.remove(cartDetail);
         notifyDataSetChanged();
-        Executor executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> {
-            apiService.deleteCartDetail(cartDetail.getCartDetailId());
+        Call<Void> call = apiService.deleteCartDetail(cartDetail.getCartDetailId());
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("CartDelete", "successful");
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("CartDelete", "error: " + t.getMessage());
+                t.printStackTrace();
+            }
         });
+
     }
 
 

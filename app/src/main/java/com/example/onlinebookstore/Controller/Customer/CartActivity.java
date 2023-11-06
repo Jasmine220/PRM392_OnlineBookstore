@@ -2,12 +2,16 @@ package com.example.onlinebookstore.Controller.Customer;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.onlinebookstore.Client.ApiClient;
@@ -16,6 +20,7 @@ import com.example.onlinebookstore.R;
 import com.example.onlinebookstore.RecycleViewAdapter.CartRecycleView;
 import com.example.onlinebookstore.Response.CartDetailResponse;
 import com.example.onlinebookstore.Service.ApiService;
+
 
 import java.util.List;
 
@@ -29,21 +34,23 @@ public class CartActivity extends AppCompatActivity {
     CheckBox checkAllBox;
     RecyclerView recyclerView;
     CartRecycleView recycleViewAdapter;
-    List<CartDetailResponse> cartDetailList;
     ApiService apiService;
-    long userId;
-
+    List<CartDetailResponse> cartDetailList;
+    TextView totalPaymentView;
+    Button purchaseBtn;
 
     @Override
     protected void onCreate(Bundle savedIntanceState) {
         super.onCreate(savedIntanceState);
         setContentView(R.layout.activity_cart);
 
-        toolbar = findViewById(R.id.toolbar);
+//        toolbar = findViewById(R.id.toolbar);
         checkAllBox = findViewById(R.id.checkBox);
         recyclerView = findViewById(R.id.recycleView);
+        totalPaymentView = findViewById(R.id.totalPaymentView);
+        purchaseBtn = findViewById(R.id.purchaseButton);
 
-        toolbar.setTitle("Bakasa");
+//        toolbar.setTitle("Bakasa");
 //        setSupportActionBar(toolbar);
 //        if(getIntent() != null){
 //            Bundle bundle = getIntent().getExtras();
@@ -51,26 +58,31 @@ public class CartActivity extends AppCompatActivity {
 //        }
 
         apiService = ApiClient.getClient().create(ApiService.class);
-        Call<List<CartDetailResponse>> call = apiService.getCartByCustomer(3);
+        Call<List<CartDetailResponse>> call = apiService.getCartByCustomer(1);
         call.enqueue(new Callback<List<CartDetailResponse>>() {
             @Override
             public void onResponse(Call<List<CartDetailResponse>> call, Response<List<CartDetailResponse>> response) {
-                if(response.isSuccessful()){
-                    cartDetailList = response.body();
-                    Log.d("Cart" , "connected to server");
+                if (response.isSuccessful()) {
+                     cartDetailList = response.body();
+                    recycleViewAdapter = new CartRecycleView(CartActivity.this, cartDetailList);
+                    recyclerView.setAdapter(recycleViewAdapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(CartActivity.this));
+                    for (CartDetailResponse cartDetail : cartDetailList) {
+                        Log.d("Cart", "Cart Detail: " + cartDetail.getBookTitle() + " - " + cartDetail.getAmount());
+                    }
+                    // Do something with the cartDetailList, such as displaying it in your RecyclerView
                 } else {
-                    Log.d("Cart" , "connected to server but respone fail");
+                    Log.d("Cart", "Connected to server but response fail");
                 }
             }
 
             @Override
             public void onFailure(Call<List<CartDetailResponse>> call, Throwable t) {
-                Log.d("Cart" , "Not connected to server");
+                Log.e("Cart", "Failed to connect to server: " + t.getMessage());
+                t.printStackTrace();
             }
         });
-        recycleViewAdapter = new CartRecycleView(this, cartDetailList);
-        recyclerView.setAdapter(recycleViewAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         checkAllBox.setOnCheckedChangeListener((compoundButton, b) -> {
             recycleViewAdapter.setCheckList(b);
@@ -78,8 +90,6 @@ public class CartActivity extends AppCompatActivity {
         });
 
 
-    }
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
     }
 }
