@@ -48,6 +48,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, BookDetailsActivity.class);
+                intent.putExtra("book_id", String.valueOf(book.getBookId()));
                 intent.putExtra("Title", book.getBookTitle());
                 intent.putExtra("Author", formatAuthors(book.getAuthors()));
                 intent.putExtra("Price", String.valueOf((int)book.getBookPrice()) + " đ");
