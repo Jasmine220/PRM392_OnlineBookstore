@@ -40,6 +40,7 @@ public class CartActivity extends AppCompatActivity {
     List<CartDetailResponse> cartDetailList;
     TextView totalPaymentView;
     Button purchaseBtn;
+    int customerId;
 
     @Override
     protected void onCreate(Bundle savedIntanceState) {
@@ -54,13 +55,12 @@ public class CartActivity extends AppCompatActivity {
         totalPaymentView.setText("Bạn chưa chọn sản phẩm nào để mua");
 //        toolbar.setTitle("Bakasa");
 //        setSupportActionBar(toolbar);
-//        if(getIntent() != null){
-//            Bundle bundle = getIntent().getExtras();
-//            userId = bundle.getLong("userId");
-//        }
+        if(getIntent() != null){
+            customerId = getIntent().getIntExtra("customerId", 0);
+        }
 
         apiService = ApiClient.getClient().create(ApiService.class);
-        Call<List<CartDetailResponse>> call = apiService.getCartByCustomer(1);
+        Call<List<CartDetailResponse>> call = apiService.getCartByCustomer(customerId);
         call.enqueue(new Callback<List<CartDetailResponse>>() {
             @Override
             public void onResponse(Call<List<CartDetailResponse>> call, Response<List<CartDetailResponse>> response) {
@@ -102,6 +102,34 @@ public class CartActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         totalPaymentView.setText("Bạn chưa chọn sản phẩm nào để mua");
+        apiService = ApiClient.getClient().create(ApiService.class);
+        Call<List<CartDetailResponse>> call = apiService.getCartByCustomer(1);
+        call.enqueue(new Callback<List<CartDetailResponse>>() {
+            @Override
+            public void onResponse(Call<List<CartDetailResponse>> call, Response<List<CartDetailResponse>> response) {
+                if (response.isSuccessful()) {
+                    cartDetailList = response.body();
+                   recycleViewAdapter.setCartDetailList(cartDetailList);
+                    for (CartDetailResponse cartDetail : cartDetailList) {
+                        Log.d("Cart", "Cart Detail: " + cartDetail.getBookTitle() + " - " + cartDetail.getAmount());
+                    }
+                    // Do something with the cartDetailList, such as displaying it in your RecyclerView
+                } else {
+                    Log.d("Cart", "Connected to server but response fail");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CartDetailResponse>> call, Throwable t) {
+                Log.e("Cart", "Failed to connect to server: " + t.getMessage());
+                t.printStackTrace();
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         apiService = ApiClient.getClient().create(ApiService.class);
         Call<List<CartDetailResponse>> call = apiService.getCartByCustomer(1);
         call.enqueue(new Callback<List<CartDetailResponse>>() {

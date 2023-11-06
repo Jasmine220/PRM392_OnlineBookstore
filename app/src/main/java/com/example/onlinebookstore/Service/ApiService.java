@@ -1,6 +1,8 @@
 package com.example.onlinebookstore.Service;
 
 import com.example.onlinebookstore.Models.Account;
+import com.example.onlinebookstore.Models.Message;
+import com.example.onlinebookstore.Models.Book;
 import com.example.onlinebookstore.Models.CartDetail;
 import com.example.onlinebookstore.Request.CartDetailRequest;
 import com.example.onlinebookstore.Request.LoginRequest;
@@ -15,6 +17,8 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
@@ -26,6 +30,17 @@ public interface ApiService {
     Call<LoginResponse> register(@Body RegisterRequest registerRequest);
     @GET("list")
     Call<List<Account>> getAllAccounts();
+    @POST("send")
+    Call<Void> sendMessage(@Body Message message);
+    @GET("messages")
+    Call<List<Message>> getChatMessages(
+            @Query("customerId") Long customerId,
+            @Query("sellerId") int sellerId
+    );
+    // Book List
+    @GET("api/books")
+    Call<List<Book>> getAllBooks();
+
     @GET("api/v1/cart-detail/")
     Call<List<CartDetailResponse>> getCartByCustomer(@Query("CustomerId") int customerId);
     @PUT("api/v1/cart-detail/")
