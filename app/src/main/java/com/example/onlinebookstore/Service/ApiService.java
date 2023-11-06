@@ -2,6 +2,7 @@ package com.example.onlinebookstore.Service;
 
 import com.example.onlinebookstore.Models.Account;
 import com.example.onlinebookstore.Models.Order;
+import com.example.onlinebookstore.Models.Book;
 import com.example.onlinebookstore.Request.LoginRequest;
 import com.example.onlinebookstore.Request.RegisterRequest;
 import com.example.onlinebookstore.Response.LoginResponse;
@@ -13,6 +14,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.Path;
 
 public interface ApiService {
     // Đăng nhập
@@ -24,4 +26,8 @@ public interface ApiService {
     Call<List<Account>> getAllAccounts();
     @GET("api/v1/order/")
     Call<Order> getOrder(@Query("orderId") int orderId);
+    // Book List
+    @GET("api/books")
+    Call<List<Book>> getAllBooks();
+
 }
