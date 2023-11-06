@@ -4,10 +4,14 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
@@ -16,7 +20,6 @@ import com.example.onlinebookstore.R;
 import java.util.Objects;
 
 public class BookDetailsActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +54,7 @@ public class BookDetailsActivity extends AppCompatActivity {
         TextView publisher = findViewById(R.id.publisher_name);
         TextView category = findViewById(R.id.category_name);
         TextView quantity = findViewById(R.id.book_quantity);
+        Button addtocart = findViewById(R.id.add_to_cart);
 
         titleTextView.setText(title);
         authorTextView.setText(author);
@@ -64,6 +68,14 @@ public class BookDetailsActivity extends AppCompatActivity {
         publisher.setText(publisher_name);
         category.setText(category_name);
         quantity.setText(book_quantity);
+        addtocart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BookDetailsActivity.this, HomeActivity.class);
+                intent.putExtra("addToCart", true); // Đánh dấu rằng một mục đã được thêm vào giỏ hàng
+                startActivity(intent);
+            }
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
