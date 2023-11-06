@@ -35,6 +35,21 @@ public class MainActivity extends AppCompatActivity {
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
+
+//            switch (itemId){
+//                case R.id.navigation_home://home
+//                    replaceFragment(new HomeFragment());
+//                    break;
+//                case  R.id.navigation_person://person
+//                    replaceFragment(new PersonFragment());
+//                    break;
+//               case R.id.navigation_chat://chat
+//                   replaceFragment(new ChatFragment());
+//                    break;
+//                case  R.id.navigation_cart://cart
+//                    replaceFragment(new CartFragment());
+//                    break;
+//            }
             if(itemId == R.id.navigation_home){
                 System.out.println("AA");
                 replaceFragment(new HomeFragment());

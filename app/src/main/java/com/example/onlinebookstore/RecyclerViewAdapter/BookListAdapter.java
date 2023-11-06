@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.onlinebookstore.Controller.Customer.BookDetailsActivity;
-import com.example.onlinebookstore.Controller.Customer.HomeActivity;
 import com.example.onlinebookstore.Models.Author;
 import com.example.onlinebookstore.Models.Book;
 import com.example.onlinebookstore.R;
@@ -52,6 +51,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
             public void onClick(View view) {
                 Intent intent = new Intent(context, BookDetailsActivity.class);
                 intent.putExtra("accountId", accountId);
+                intent.putExtra("book_id", String.valueOf(book.getBookId()));
                 intent.putExtra("Title", book.getBookTitle());
                 intent.putExtra("Author", formatAuthors(book.getAuthors()));
                 intent.putExtra("Price", String.valueOf((int)book.getBookPrice()) + " đ");

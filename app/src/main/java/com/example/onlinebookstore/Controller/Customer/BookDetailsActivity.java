@@ -1,6 +1,5 @@
 package com.example.onlinebookstore.Controller.Customer;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,12 +9,23 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
-import com.example.onlinebookstore.R;
+import android.widget.Toast;
 
-import java.util.Objects;
+import com.bumptech.glide.Glide;
+import com.example.onlinebookstore.Client.ApiClient;
+import com.example.onlinebookstore.Models.CartDetail;
+import com.example.onlinebookstore.R;
+import com.example.onlinebookstore.Request.CartDetailRequest;
+import com.example.onlinebookstore.Service.ApiService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class BookDetailsActivity extends AppCompatActivity {
     private int accountId;
@@ -31,6 +41,7 @@ public class BookDetailsActivity extends AppCompatActivity {
         // showing the back button in action bar
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        String book_id = getIntent().getStringExtra("book_id");
         String title = getIntent().getStringExtra("Title");
         String author = getIntent().getStringExtra("Author");
         String price = getIntent().getStringExtra("Price");
@@ -67,6 +78,47 @@ public class BookDetailsActivity extends AppCompatActivity {
         publisher.setText(publisher_name);
         category.setText(category_name);
         quantity.setText(book_quantity);
+
+        // Trong phương thức onClick của nút "Add to Cart"
+        Button addToCart = findViewById(R.id.add_to_cart);
+        addToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int customerId = 1; // Điền ID của khách hàng tại đây
+                int bookId = Integer.valueOf(book_id); // Điền ID của sách tại đây
+                int amount = 1; // Số lượng sách bạn muốn thêm vào giỏ hàng
+
+                // Tạo đối tượng CartDetailRequest
+                CartDetailRequest request = new CartDetailRequest();
+                request.setCustomerId(customerId);
+                request.setBookId(bookId);
+                request.setAmount(amount);
+
+                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                // Gửi yêu cầu thêm sách vào giỏ hàng
+                Call<CartDetail> call = apiService.createCartDetail(request);
+                call.enqueue(new Callback<CartDetail>() {
+                    @Override
+                    public void onResponse(Call<CartDetail> call, Response<CartDetail> response) {
+                        if (response.isSuccessful()) {
+                            // Xử lý khi thêm sách vào giỏ hàng thành công
+                            // Hiển thị thông báo hoặc thực hiện các hành động khác
+                            showToast("Add " + title + " successfully!");
+
+                        } else {
+                            // Xử lý khi có lỗi xảy ra trong quá trình thêm sách vào giỏ hàng
+                            showToast("Add " + title + " failure!");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<CartDetail> call, Throwable t) {
+                        // Xử lý khi gửi yêu cầu thất bại
+                    }
+                });
+            }
+        });
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -94,5 +146,8 @@ public class BookDetailsActivity extends AppCompatActivity {
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void showToast(String message) {
+        Toast.makeText(BookDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }
