@@ -23,10 +23,11 @@ import com.example.onlinebookstore.Response.CartDetailResponse;
 import com.example.onlinebookstore.Service.ApiService;
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.Locale;
+
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,6 +50,14 @@ public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyView
 
     }
 
+    private String formatCurrency(double price){
+        Locale locale = new Locale("vi", "VN");
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(locale);
+        String formattedAmount = currencyFormat.format(price);
+
+        return formattedAmount;
+    }
+
     public void updateTotalPaymentData(){
         price = 0;
         chosenList.stream().forEach( cartDetailResponse ->{
@@ -59,7 +68,7 @@ public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyView
             purchaseBtn.setEnabled(false);
         }
         else{
-            totalPaymentView.setText("Tổng thanh toán: " + price + "đ");
+            totalPaymentView.setText("Tổng thanh toán: " + formatCurrency(price));
             purchaseBtn.setEnabled(true);
         }
     }
@@ -81,6 +90,9 @@ public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyView
            checkList.set(checkList.indexOf(aBoolean), value);
         });
     }
+    public List<CartDetailResponse> getChosenList() {
+        return chosenList;
+    }
 
     @NonNull
     @Override
@@ -94,8 +106,9 @@ public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyView
         Picasso.get().load(cartDetailList.get(position).getBookImage()).into(holder.imageView);
         holder.title.setText(cartDetailList.get(position).getBookTitle());
         holder.amount.setText(String.valueOf(cartDetailList.get(position).getAmount()));
-        holder.unitPrice.setText("Đơn giá: " + String.valueOf(cartDetailList.get(position).getBookPrice()) + "đ");
-        holder.payment.setText(String.valueOf("Thành tiền: "+cartDetailList.get(position).getAmount() * cartDetailList.get(position).getBookPrice() + "đ" ));
+        holder.unitPrice.setText("Đơn giá: " + formatCurrency(cartDetailList.get(position).getBookPrice()));
+        double totalPrice = cartDetailList.get(position).getAmount() * cartDetailList.get(position).getBookPrice();
+        holder.payment.setText(String.valueOf("Thành tiền: "+ formatCurrency(totalPrice) ));
         CartDetailResponse cartDetail = cartDetailList.get(position);
 
         holder.checkBox.setChecked(checkList.get(position));
@@ -149,9 +162,7 @@ public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyView
 
     }
 
-    public List<CartDetailResponse> getChosenList() {
-        return chosenList;
-    }
+
 
     void updateItem(CartDetailResponse cartDetail){
 

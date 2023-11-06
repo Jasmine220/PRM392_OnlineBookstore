@@ -50,4 +50,5 @@ dependencies {
         exclude(group = "org.json", module = "json")
     }
     implementation("androidx.gridlayout:gridlayout:1.0.0")
+    implementation("com.squareup.picasso:picasso:2.71828")
 }

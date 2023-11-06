@@ -1,6 +1,8 @@
 package com.example.onlinebookstore.Response;
 
-public class CartDetailResponse {
+import java.io.Serializable;
+
+public class CartDetailResponse implements Serializable {
     private long cartDetailId;
     private int customerId;
     private int bookId;
