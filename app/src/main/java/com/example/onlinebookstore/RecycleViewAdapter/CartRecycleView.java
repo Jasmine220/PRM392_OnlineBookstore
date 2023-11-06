@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -37,12 +38,42 @@ public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyView
     ApiService apiService;
     List<Boolean> checkList = new ArrayList<>();
     List<CartDetailResponse> chosenList = new ArrayList<>();
+    TextView totalPaymentView;
+    Button purchaseBtn;
+    double price;
     public CartRecycleView( Context context, List<CartDetailResponse> cartDetailList){
         this.cartDetailList = cartDetailList;
         this.context = context;
         apiService = ApiClient.getClient().create(ApiService.class);
         cartDetailList.stream().forEach(cartDetail -> checkList.add(false));
 
+    }
+
+    public void updateTotalPaymentData(){
+        price = 0;
+        chosenList.stream().forEach( cartDetailResponse ->{
+            price += cartDetailResponse.getBookPrice() * cartDetailResponse.getAmount();
+        });
+        if(price == 0){
+            totalPaymentView.setText("Bạn chưa chọn sản phẩm nào để mua");
+            purchaseBtn.setEnabled(false);
+        }
+        else{
+            totalPaymentView.setText("Tổng thanh toán: " + price + "đ");
+            purchaseBtn.setEnabled(true);
+        }
+    }
+
+    public void setCartDetailList(List<CartDetailResponse> cartDetailList){
+        this.cartDetailList = cartDetailList;
+    }
+
+    public void setTotalPaymentView(TextView view){
+        totalPaymentView = view;
+    }
+
+    public void setPurchaseBtn(Button purchaseBtn){
+        this.purchaseBtn = purchaseBtn;
     }
 
     public void setCheckList(Boolean value){
@@ -70,18 +101,25 @@ public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyView
         holder.checkBox.setChecked(checkList.get(position));
         holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
             checkList.set(position, b);
-        });
-        if(checkList.get(position) == true){
-            chosenList.add(cartDetail);
-        }else{
-            if(chosenList.contains(cartDetail)){
-                chosenList.remove(position);
+            if(b == true){
+                chosenList.add(cartDetail);
             }
-        }
+            else{
+                chosenList.remove(cartDetail);
+            }
+            updateTotalPaymentData();
+        });
+
+
 
         holder.plusBtn.setOnClickListener(view -> {
+            int index = chosenList.indexOf(cartDetail);
             cartDetail.setAmount(cartDetail.getAmount() + 1);
             cartDetailList.set(position, cartDetail);
+            if(index >= 0){
+                chosenList.set(index, cartDetail);
+            }
+            updateTotalPaymentData();
             notifyDataSetChanged();
             updateItem(cartDetail);
         });
@@ -90,7 +128,12 @@ public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyView
             if(cartDetail.getAmount() == 1){
                 deleteItem(cartDetail);
             }else{
+                int index = chosenList.indexOf(cartDetail);
                 cartDetail.setAmount(cartDetail.getAmount() - 1);
+                if(index >= 0){
+                    chosenList.set(index, cartDetail);
+                }
+                updateTotalPaymentData();
                 cartDetailList.set(position, cartDetail);
                 notifyDataSetChanged();
                updateItem(cartDetail);
@@ -111,6 +154,7 @@ public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyView
     }
 
     void updateItem(CartDetailResponse cartDetail){
+
         Call<CartDetail> call = apiService.updateCartDetail(cartDetail.getCartDetailId(), cartDetail.getAmount());
         call.enqueue(new Callback<CartDetail>() {
             @Override
@@ -131,6 +175,10 @@ public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyView
 
     void deleteItem(CartDetailResponse cartDetail){
         cartDetailList.remove(cartDetail);
+        if(chosenList.contains(cartDetail)){
+            chosenList.remove(cartDetail);
+            updateTotalPaymentData();
+        }
         notifyDataSetChanged();
         Call<Void> call = apiService.deleteCartDetail(cartDetail.getCartDetailId());
         call.enqueue(new Callback<Void>() {
