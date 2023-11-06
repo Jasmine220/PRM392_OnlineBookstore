@@ -15,17 +15,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.bumptech.glide.Glide;
 import com.example.onlinebookstore.Client.ApiClient;
 import com.example.onlinebookstore.R;
 import com.example.onlinebookstore.Models.CartDetail;
 import com.example.onlinebookstore.Response.CartDetailResponse;
 import com.example.onlinebookstore.Service.ApiService;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,7 +59,7 @@ public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Picasso.get().load(cartDetailList.get(position).getBookImage()).into(holder.imageView);
+        Glide.with(context).load(cartDetailList.get(position).getBookImage()).into(holder.imageView);
         holder.title.setText(cartDetailList.get(position).getBookTitle());
         holder.amount.setText(String.valueOf(cartDetailList.get(position).getAmount()));
         holder.unitPrice.setText("Đơn giá: " + String.valueOf(cartDetailList.get(position).getBookPrice()) + "đ");
