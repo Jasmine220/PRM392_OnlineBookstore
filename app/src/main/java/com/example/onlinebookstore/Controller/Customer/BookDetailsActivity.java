@@ -4,6 +4,8 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,12 +18,13 @@ import com.example.onlinebookstore.R;
 import java.util.Objects;
 
 public class BookDetailsActivity extends AppCompatActivity {
-
+    private int accountId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
-
+        Intent intent = getIntent();
+        accountId = intent.getIntExtra("accountId", 0);
         // calling the action bar
         ActionBar actionBar = getSupportActionBar();
 
@@ -79,6 +82,16 @@ public class BookDetailsActivity extends AppCompatActivity {
             case android.R.id.home:
                 this.finish();
                 return true;
+        }
+        int id = item.getItemId();
+        if (id == R.id.navigation_chat){
+            Intent intent = new Intent(BookDetailsActivity.this, ChatActivity.class);
+            if (accountId == 4) {
+                intent.putExtra("sellerId", accountId);
+            } else {
+                intent.putExtra("customerId", accountId);
+            }
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

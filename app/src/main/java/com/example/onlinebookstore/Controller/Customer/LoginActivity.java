@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                             int accountId = loginResponse.getAccountId();
                             // Lưu token hoặc thực hiện các hành động khác sau khi đăng nhập thành công
                             // Ví dụ: chuyển sang màn hình chính (MainActivity)
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             intent.putExtra("accountId", accountId);
                             startActivity(intent);
 
