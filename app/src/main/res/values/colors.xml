@@ -8,5 +8,6 @@
     <color name="black_1">#272729</color>
     <color name="black_2">#39383C</color>
     <color name="lightgray">#808087</color>
+    <color name="red">#FFE53935</color>
 
 </resources>
