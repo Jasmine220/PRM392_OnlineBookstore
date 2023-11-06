@@ -44,6 +44,10 @@ public class CartRecycleView extends RecyclerView.Adapter<CartRecycleView.MyView
 
     }
 
+    public void setCartDetailList(List<CartDetailResponse> cartDetailList){
+        this.cartDetailList = cartDetailList;
+    }
+
     public void setCheckList(Boolean value){
         this.checkList.stream().forEach(aBoolean -> {
            checkList.set(checkList.indexOf(aBoolean), value);

@@ -84,13 +84,12 @@ public class BookDetailsActivity extends AppCompatActivity {
         addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int customerId = 1; // Điền ID của khách hàng tại đây
                 int bookId = Integer.valueOf(book_id); // Điền ID của sách tại đây
                 int amount = 1; // Số lượng sách bạn muốn thêm vào giỏ hàng
 
                 // Tạo đối tượng CartDetailRequest
                 CartDetailRequest request = new CartDetailRequest();
-                request.setCustomerId(customerId);
+                request.setCustomerId(accountId);
                 request.setBookId(bookId);
                 request.setAmount(amount);
 
@@ -143,6 +142,10 @@ public class BookDetailsActivity extends AppCompatActivity {
             } else {
                 intent.putExtra("customerId", accountId);
             }
+            startActivity(intent);
+        }
+        if (id == R.id.navigation_cart){
+            Intent intent = new Intent(BookDetailsActivity.this, CartActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

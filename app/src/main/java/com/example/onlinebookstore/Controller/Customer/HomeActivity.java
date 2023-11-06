@@ -85,6 +85,11 @@ public class HomeActivity extends AppCompatActivity {
             }
             startActivity(intent);
         }
+        if (id == R.id.navigation_cart){
+            Intent intent = new Intent(HomeActivity.this, CartActivity.class);
+            intent.putExtra("customerId", accountId);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
