@@ -1,7 +1,7 @@
 package com.example.onlinebookstore.Service;
 
 import com.example.onlinebookstore.Models.Account;
-import com.example.onlinebookstore.Models.Message;
+import com.example.onlinebookstore.Models.Order;
 import com.example.onlinebookstore.Models.Book;
 import com.example.onlinebookstore.Models.CartDetail;
 import com.example.onlinebookstore.Request.CartDetailRequest;
@@ -17,10 +17,9 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 import retrofit2.http.PUT;
-import retrofit2.http.Query;
 
 public interface ApiService {
     // Đăng nhập
@@ -30,6 +29,8 @@ public interface ApiService {
     Call<LoginResponse> register(@Body RegisterRequest registerRequest);
     @GET("list")
     Call<List<Account>> getAllAccounts();
+    @GET("api/v1/order/")
+    Call<Order> getOrder(@Query("orderId") int orderId);
     @POST("send")
     Call<Void> sendMessage(@Body Message message);
     @GET("messages")
