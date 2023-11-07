@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,23 +15,46 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
-import com.example.onlinebookstore.R;
+import android.widget.Toast;
 
-import java.util.Objects;
+import com.bumptech.glide.Glide;
+import com.example.onlinebookstore.Client.ApiClient;
+import com.example.onlinebookstore.Models.CartDetail;
+import com.example.onlinebookstore.R;
+import com.example.onlinebookstore.Request.CartDetailRequest;
+import com.example.onlinebookstore.Response.CartDetailResponse;
+import com.example.onlinebookstore.Service.ApiService;
+
+import java.io.IOException;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class BookDetailsActivity extends AppCompatActivity {
+    private int accountId;
+    private int bookId;
+    private ApiService apiService = ApiClient.getClient().create(ApiService.class);
+    List<CartDetailResponse> cartDetailResponseList;
+    boolean check = false;
+    int addCount;
+    HomeActivity activity = new HomeActivity();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
-
+        Intent intent = getIntent();
+        accountId = intent.getIntExtra("accountId", 0);
         // calling the action bar
         ActionBar actionBar = getSupportActionBar();
 
         // showing the back button in action bar
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        String book_id = getIntent().getStringExtra("book_id");
+        bookId = Integer.valueOf(book_id);
         String title = getIntent().getStringExtra("Title");
         String author = getIntent().getStringExtra("Author");
         String price = getIntent().getStringExtra("Price");
@@ -54,8 +78,6 @@ public class BookDetailsActivity extends AppCompatActivity {
         TextView publisher = findViewById(R.id.publisher_name);
         TextView category = findViewById(R.id.category_name);
         TextView quantity = findViewById(R.id.book_quantity);
-        Button addtocart = findViewById(R.id.add_to_cart);
-
         titleTextView.setText(title);
         authorTextView.setText(author);
         priceTextView.setText(price);
@@ -68,15 +90,110 @@ public class BookDetailsActivity extends AppCompatActivity {
         publisher.setText(publisher_name);
         category.setText(category_name);
         quantity.setText(book_quantity);
-        addtocart.setOnClickListener(new View.OnClickListener() {
+        getCart();
+        // Trong phương thức onClick của nút "Add to Cart"
+        Button addToCart = findViewById(R.id.add_to_cart);
+        addCount = 0;
+        addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(BookDetailsActivity.this, HomeActivity.class);
-                intent.putExtra("addToCart", true); // Đánh dấu rằng một mục đã được thêm vào giỏ hàng
-                startActivity(intent);
+                addCount++;
+                activity.showCartNotification();
+                showToast("Add successfully!");
+            }
+        });
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(!isAddToCart())
+            addToCart();
+    }
+
+    private void addToCart(){
+
+        // Tạo đối tượng CartDetailRequest
+        CartDetailRequest request = new CartDetailRequest();
+        request.setCustomerId(accountId);
+        request.setBookId(bookId);
+        request.setAmount(1);
+
+        // Gửi yêu cầu thêm sách vào giỏ hàng
+        Call<CartDetail> call = apiService.createCartDetail(request);
+        call.enqueue(new Callback<CartDetail>() {
+            @Override
+            public void onResponse(Call<CartDetail> call, Response<CartDetail> response) {
+                if (response.isSuccessful()) {
+                    Log.d("Cart", "add successful");
+
+                } else {
+                    Log.e("Cart", "add fail");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CartDetail> call, Throwable t) {
+                // Xử lý khi gửi yêu cầu thất bại
             }
         });
     }
+
+    private void updateToCart(long cartDetailId, long amount){
+        Call<CartDetail> call = apiService.updateCartDetail(cartDetailId, amount);
+        call.enqueue(new Callback<CartDetail>() {
+            @Override
+            public void onResponse(Call<CartDetail> call, Response<CartDetail> response) {
+              if(response.isSuccessful()){
+                  Log.d("Cart", "update successful");
+              }else {
+                  Log.e("Cart", "update fail");
+              }
+            }
+
+            @Override
+            public void onFailure(Call<CartDetail> call, Throwable t) {
+                Log.e("Cart", "Failed to connect to server: " + t.getMessage());
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void getCart(){
+        Call<List<CartDetailResponse>> call = apiService.getCartByCustomer(accountId);
+        call.enqueue(new Callback<List<CartDetailResponse>>() {
+            @Override
+            public void onResponse(Call<List<CartDetailResponse>> call, Response<List<CartDetailResponse>> response) {
+                if(response.isSuccessful()){
+                    cartDetailResponseList = response.body();
+                    Log.d("Cart", "get cart successful");
+                }else {
+                    Log.e("Cart", "get cart fail");
+                }
+            }
+            @Override
+            public void onFailure(Call<List<CartDetailResponse>> call, Throwable t) {
+                Log.e("Cart", "Failed to connect to server: " + t.getMessage());
+                t.printStackTrace();
+            }
+        });
+
+    }
+
+    private boolean isAddToCart(){
+        check = false;
+        cartDetailResponseList.stream().forEach(cartDetailResponse -> {
+            if(cartDetailResponse.getBookId() == bookId){
+                check = true;
+                updateToCart(cartDetailResponse.getCartDetailId(), cartDetailResponse.getAmount() + addCount);
+            }
+
+        });
+        return check;
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -92,6 +209,24 @@ public class BookDetailsActivity extends AppCompatActivity {
                 this.finish();
                 return true;
         }
+        int id = item.getItemId();
+        if (id == R.id.navigation_chat){
+            Intent intent = new Intent(BookDetailsActivity.this, ChatActivity.class);
+            if (accountId == 4) {
+                intent.putExtra("sellerId", accountId);
+            } else {
+                intent.putExtra("customerId", accountId);
+            }
+            startActivity(intent);
+        }
+        if (id == R.id.navigation_cart){
+            Intent intent = new Intent(BookDetailsActivity.this, CartActivity.class);
+            intent.putExtra("customerId", accountId);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
+    }
+    private void showToast(String message) {
+        Toast.makeText(BookDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }

@@ -26,11 +26,13 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
     Context context;
     ArrayList<Book> books;
     ArrayList<Book> booksFilter;
+    int accountId;
 
-    public BookListAdapter(Context context, ArrayList<Book> books) {
+    public BookListAdapter(Context context, ArrayList<Book> books, int accountId) {
         this.context = context;
         this.books = books;
         this.booksFilter = books;
+        this.accountId = accountId;
     }
 
     @NonNull
@@ -48,6 +50,8 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, BookDetailsActivity.class);
+                intent.putExtra("accountId", accountId);
+                intent.putExtra("book_id", String.valueOf(book.getBookId()));
                 intent.putExtra("Title", book.getBookTitle());
                 intent.putExtra("Author", formatAuthors(book.getAuthors()));
                 intent.putExtra("Price", String.valueOf((int)book.getBookPrice()) + " đ");

@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                             int accountId = loginResponse.getAccountId();
                             // Lưu token hoặc thực hiện các hành động khác sau khi đăng nhập thành công
                             // Ví dụ: chuyển sang màn hình chính (MainActivity)
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             intent.putExtra("accountId", accountId);
                             startActivity(intent);
 
@@ -64,7 +64,11 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<LoginResponse> call, Throwable t) {
                         // Xử lý lỗi kết nối hoặc lỗi mạng ở đây
-                        showToast("Login failed. Please check your network connection.");
+                        String errorMessage = "Login failed. Please check your network connection.";
+                        if (t.getMessage() != null) {
+                            errorMessage = "Login failed. Error: " + t.getMessage();
+                        }
+                        showToast(errorMessage);
                     }
                 });
             }

@@ -14,15 +14,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import androidx.appcompat.widget.SearchView;
+
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.onlinebookstore.Client.ApiClient;
+import com.example.onlinebookstore.MainActivity;
 import com.example.onlinebookstore.Models.Book;
 import com.example.onlinebookstore.R;
 import com.example.onlinebookstore.RecyclerViewAdapter.BookListAdapter;
+import com.example.onlinebookstore.Response.CartDetailResponse;
 import com.example.onlinebookstore.Service.ApiService;
 
 import java.util.ArrayList;
@@ -38,17 +43,22 @@ public class HomeActivity extends AppCompatActivity {
     BookListAdapter rvBookListAdapter;
     private SearchView searchView;
     ArrayList<Book> books;
+    private int accountId;
+    List<CartDetailResponse> cartDetailResponseList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        Intent intent = getIntent();
+        accountId = intent.getIntExtra("accountId", 0);
         populateBooks();
         books = new ArrayList<>();
         rv_bookList = findViewById(R.id.rv_bookList);
         rv_bookList.setLayoutManager(new GridLayoutManager(this, 2));
-        rvBookListAdapter = new BookListAdapter(HomeActivity.this, books);
+        rvBookListAdapter = new BookListAdapter(HomeActivity.this, books,accountId);
         rv_bookList.setAdapter(rvBookListAdapter);
-        showNotification();
+
+        getCart();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -74,7 +84,25 @@ public class HomeActivity extends AppCompatActivity {
         });
         return true;
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.navigation_chat){
+            Intent intent = new Intent(HomeActivity.this, ChatActivity.class);
+            if (accountId == 4) {
+                intent.putExtra("sellerId", accountId);
+            } else {
+                intent.putExtra("customerId", accountId);
+            }
+            startActivity(intent);
+        }
+        if (id == R.id.navigation_cart){
+            Intent intent = new Intent(HomeActivity.this, CartActivity.class);
+            intent.putExtra("customerId", accountId);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public void populateBooks() {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
@@ -111,6 +139,30 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+    private void getCart(){
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<List<CartDetailResponse>> call = apiService.getCartByCustomer(accountId);
+        call.enqueue(new Callback<List<CartDetailResponse>>() {
+            @Override
+            public void onResponse(Call<List<CartDetailResponse>> call, Response<List<CartDetailResponse>> response) {
+                if(response.isSuccessful()){
+                    cartDetailResponseList = response.body();
+                    if (cartDetailResponseList != null){
+                        showCartNotification();
+                    }
+                    Log.d("Cart", "get cart successful");
+                }else {
+                    Log.e("Cart", "get cart fail");
+                }
+            }
+            @Override
+            public void onFailure(Call<List<CartDetailResponse>> call, Throwable t) {
+                Log.e("Cart", "Failed to connect to server: " + t.getMessage());
+                t.printStackTrace();
+            }
+        });
+
+    }
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "My Notification Channel";
@@ -125,23 +177,18 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
     }
-    public void showNotification() {
-        Intent intent = getIntent();
-        if (intent.getBooleanExtra("addToCart", false)) {
-            showCartNotification();
-        }
         // Các bước tạo thông báo ở đây, giống như trong code của bạn.
-    }
     void showCartNotification() {
         createNotificationChannel(); // Đảm bảo kênh thông báo đã được tạo
         // Create an explicit intent for an Activity in your app
         Intent intent = new Intent(this, CartActivity.class);
+        intent.putExtra("customerId", accountId);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         // Set the intent that will fire when the user taps the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "my_channel_id")
                 .setContentTitle("Your Cart")
-                .setContentText("New Items Added")
+                .setContentText("Have Items")
                 .setSmallIcon(R.drawable.ic_cart_notification)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true); // Tự động đóng thông báo sau khi được ấn
