@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
         Message message = messages.get(position);
         // Hiển thị thông tin của tin nhắn trong ViewHolder
+        if (message.getType().equals("Seller")) {
+            // Đây là tin nhắn từ Seller (người nhận), đặt màu cam
+            holder.frameLayout.setBackgroundResource(R.drawable.seller_background);
+        } else {
+            // Đây là tin nhắn từ Customer (người gửi), đặt màu nền mặc định (xanh)
+            holder.frameLayout.setBackgroundResource(R.drawable.customer_background);
+        }
+
         holder.textViewMessageContent.setText(message.getMessageContent());
         holder.textViewDateTime.setText(message.getMessageDatetime().toString());
         // Thêm mã để hiển thị hình ảnh, ngày giờ, v.v.
@@ -46,10 +55,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     public class ChatViewHolder extends RecyclerView.ViewHolder {
         TextView textViewMessageContent;
         TextView textViewDateTime;
+        FrameLayout frameLayout;
         // Thêm các phần tử giao diện khác tại đây
 
         public ChatViewHolder(@NonNull View itemView) {
             super(itemView);
+            frameLayout = itemView.findViewById(R.id.frameLayoutMessage);
             textViewMessageContent = itemView.findViewById(R.id.textViewMessageContent);
             textViewDateTime = itemView.findViewById(R.id.textViewMessageTimestamp);
             // Khởi tạo các phần tử giao diện khác ở đây

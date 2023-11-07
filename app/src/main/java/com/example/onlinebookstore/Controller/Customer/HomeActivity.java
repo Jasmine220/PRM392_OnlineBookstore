@@ -89,11 +89,7 @@ public class HomeActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.navigation_chat){
             Intent intent = new Intent(HomeActivity.this, ChatActivity.class);
-            if (accountId == 4) {
-                intent.putExtra("sellerId", accountId);
-            } else {
                 intent.putExtra("customerId", accountId);
-            }
             startActivity(intent);
         }
         if (id == R.id.navigation_cart){
