@@ -85,7 +85,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         });
     }
     private void fetchOrderDetails() {
-        int orderId = 4;
+        int orderId = 7;
         Call<Order> call = apiService.getOrder(orderId);
         call.enqueue(new Callback<Order>() {
             @Override

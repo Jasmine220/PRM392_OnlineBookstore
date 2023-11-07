@@ -25,11 +25,7 @@
         <activity
             android:name=".Controller.Customer.OrderDetailsActivity"
             android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".Controller.Customer.PaymentSuccessfulActivity"
@@ -63,6 +59,11 @@
         <activity
             android:name=".Controller.Customer.HomeActivity"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
