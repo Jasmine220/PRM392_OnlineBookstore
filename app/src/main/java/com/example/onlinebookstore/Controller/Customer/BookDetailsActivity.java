@@ -40,6 +40,7 @@ public class BookDetailsActivity extends AppCompatActivity {
     List<CartDetailResponse> cartDetailResponseList;
     boolean check = false;
     int addCount;
+    HomeActivity activity = new HomeActivity();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +98,7 @@ public class BookDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 addCount++;
+                activity.showCartNotification();
                 showToast("Add successfully!");
             }
         });

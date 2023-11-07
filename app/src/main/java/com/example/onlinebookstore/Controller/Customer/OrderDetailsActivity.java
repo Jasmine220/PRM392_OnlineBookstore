@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +40,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     ApiService apiService;
     RecyclerView orderDetailsRecyclerView;
     OrderItemAdapter orderItemAdapter;
+    Button nextBuy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +52,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         addressTextView = findViewById(R.id.textView11);
         orderTimeTextView = findViewById(R.id.textView12);
         totalTextView = findViewById(R.id.textView10);
-
+        nextBuy = findViewById(R.id.Button);
         // Khởi tạo Adapter và thiết lập cho RecyclerView
 
         // Khởi tạo ApiService
@@ -57,6 +60,13 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
         // Thực hiện cuộc gọi API để lấy dữ liệu đơn hàng
         fetchBooks();
+        nextBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(OrderDetailsActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        });
     }
     private List<Book> booksList; // Biến lưu danh sách sách
 

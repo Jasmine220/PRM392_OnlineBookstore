@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.example.onlinebookstore.Controller.Customer.ChatActivity;
 import com.example.onlinebookstore.Fragment.CartFragment;
-import com.example.onlinebookstore.Fragment.HomeFragment;
 import com.example.onlinebookstore.Fragment.PersonFragment;
 import com.example.onlinebookstore.databinding.ActivityMainBinding;
 
@@ -30,11 +29,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         Intent intent = getIntent();
         accountId = intent.getIntExtra("accountId", 0);
-        // Tạo ChatFragment và truyền customerId vào đó
-        replaceFragment(new HomeFragment());//default display when run app
+/*        // Tạo ChatFragment và truyền customerId vào đó
+        replaceFragment(new HomeFragment());//default display when run app*/
 
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
+//        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+//            int itemId = item.getItemId();
 
 //            switch (itemId){
 //                case R.id.navigation_home://home
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 //                    replaceFragment(new CartFragment());
 //                    break;
 //            }
-            if(itemId == R.id.navigation_home){
+   /*         if(itemId == R.id.navigation_home){
                 System.out.println("AA");
                 replaceFragment(new HomeFragment());
                 return true;
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             }
-        });
+        });*/
         System.out.println("EEE");
     }   @Override
     public boolean onCreateOptionsMenu (Menu menu){
