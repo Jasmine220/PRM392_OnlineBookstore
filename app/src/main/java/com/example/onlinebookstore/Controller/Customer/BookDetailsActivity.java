@@ -220,6 +220,7 @@ public class BookDetailsActivity extends AppCompatActivity {
         }
         if (id == R.id.navigation_cart){
             Intent intent = new Intent(BookDetailsActivity.this, CartActivity.class);
+            intent.putExtra("customerId", accountId);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
