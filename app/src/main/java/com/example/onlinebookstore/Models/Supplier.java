@@ -9,20 +9,7 @@ public class Supplier {
         return supplierId;
     }
 
-    public void setSupplierId(int supplierId) {
-        this.supplierId = supplierId;
-    }
-
     public String getSupplierName() {
         return supplierName;
-    }
-
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
-    }
-
-    public Supplier(int supplierId, String supplierName) {
-        this.supplierId = supplierId;
-        this.supplierName = supplierName;
     }
 }

@@ -5,27 +5,37 @@ import java.util.List;
 
 public class Order {
     private int orderId;
-
     private int paymentMethodId;
-
     private int sellerId;
-
     private int customerId;
 
     private Double price;
 
-
     private int orderStatusId;
-
     private Date orderDatetime;
-
     private Date shippedDatetime;
-
     private int shippingMethodId;
 
     private String address;
 
     private List<OrderDetails> orderDetailsList;
+
+    public Order() {
+    }
+
+    public Order(int orderId, int paymentMethodId, int sellerId, int customerId, Double price, int orderStatusId, Date orderDatetime, Date shippedDatetime, int shippingMethodId, String address, List<OrderDetails> orderDetailsList) {
+        this.orderId = orderId;
+        this.paymentMethodId = paymentMethodId;
+        this.sellerId = sellerId;
+        this.customerId = customerId;
+        this.price = price;
+        this.orderStatusId = orderStatusId;
+        this.orderDatetime = orderDatetime;
+        this.shippedDatetime = shippedDatetime;
+        this.shippingMethodId = shippingMethodId;
+        this.address = address;
+        this.orderDetailsList = orderDetailsList;
+    }
 
     public int getOrderId() {
         return orderId;
@@ -113,22 +123,5 @@ public class Order {
 
     public void setOrderDetailsList(List<OrderDetails> orderDetailsList) {
         this.orderDetailsList = orderDetailsList;
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "orderId=" + orderId +
-                ", paymentMethodId=" + paymentMethodId +
-                ", sellerId=" + sellerId +
-                ", customerId=" + customerId +
-                ", price=" + price +
-                ", orderStatusId=" + orderStatusId +
-                ", orderDatetime=" + orderDatetime +
-                ", shippedDatetime=" + shippedDatetime +
-                ", shippingMethodId=" + shippingMethodId +
-                ", address='" + address + '\'' +
-                ", orderDetailsList=" + orderDetailsList +
-                '}';
     }
 }

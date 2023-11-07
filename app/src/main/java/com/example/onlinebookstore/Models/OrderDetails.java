@@ -2,17 +2,12 @@ package com.example.onlinebookstore.Models;
 
 public class OrderDetails {
     private int orderDetailsId;
-
     private int orderId;
-
-
     private int bookId;
-
     private int quantity;
     private double unit_price;
 
-    public int getOrderDetailsId() {
-        return orderDetailsId;
+    public OrderDetails() {
     }
 
     public OrderDetails(int orderDetailsId, int orderId, int bookId, int quantity, double unit_price) {
@@ -21,6 +16,10 @@ public class OrderDetails {
         this.bookId = bookId;
         this.quantity = quantity;
         this.unit_price = unit_price;
+    }
+
+    public int getOrderDetailsId() {
+        return orderDetailsId;
     }
 
     public void setOrderDetailsId(int orderDetailsId) {

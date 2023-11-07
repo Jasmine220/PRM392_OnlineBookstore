@@ -1,28 +1,22 @@
 package com.example.onlinebookstore.Models;
 
+import java.util.Collection;
+
 public class Author {
     private int authorId;
 
     private String authorName;
+    private Collection<Book> books;
 
     public int getAuthorId() {
         return authorId;
-    }
-
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
     }
 
     public String getAuthorName() {
         return authorName;
     }
 
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
-    }
-
-    public Author(int authorId, String authorName) {
-        this.authorId = authorId;
-        this.authorName = authorName;
+    public Collection<Book> getBooks() {
+        return books;
     }
 }
