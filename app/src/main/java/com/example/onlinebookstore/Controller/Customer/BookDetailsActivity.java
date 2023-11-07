@@ -98,7 +98,7 @@ public class BookDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 addCount++;
-                activity.showCartNotification();
+//                activity.createNotifications();
                 showToast("Add successfully!");
             }
         });

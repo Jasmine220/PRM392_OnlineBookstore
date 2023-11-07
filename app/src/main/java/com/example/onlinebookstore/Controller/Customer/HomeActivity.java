@@ -1,10 +1,16 @@
 package com.example.onlinebookstore.Controller.Customer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -12,6 +18,8 @@ import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +38,8 @@ import com.example.onlinebookstore.RecyclerViewAdapter.BookListAdapter;
 import com.example.onlinebookstore.Response.CartDetailResponse;
 import com.example.onlinebookstore.Service.ApiService;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +47,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import com.squareup.picasso.Picasso;
 
 public class HomeActivity extends AppCompatActivity {
     RecyclerView rv_bookList;
@@ -44,10 +55,16 @@ public class HomeActivity extends AppCompatActivity {
     private SearchView searchView;
     ArrayList<Book> books;
     private int accountId;
-    List<CartDetailResponse> cartDetailResponseList;
+    List<CartDetailResponse> cartDetailList;
+    Bitmap bitmap;
+    Boolean isNotify = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState != null){
+            isNotify = savedInstanceState.getBoolean("isNotify");
+        }
+
         setContentView(R.layout.activity_home);
         Intent intent = getIntent();
         accountId = intent.getIntExtra("accountId", 0);
@@ -60,6 +77,24 @@ public class HomeActivity extends AppCompatActivity {
 
         getCart();
     }
+
+    @Override
+    protected void onStart() {
+        if(!isNotify){
+            createNotificationChannel();
+            createNotifications();
+        }
+
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean("isNotify", true);
+        super.onSaveInstanceState(outState);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -103,7 +138,6 @@ public class HomeActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
     public void populateBooks() {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
         Call<List<Book>> call = apiService.getAllBooks();
@@ -146,10 +180,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<CartDetailResponse>> call, Response<List<CartDetailResponse>> response) {
                 if(response.isSuccessful()){
-                    cartDetailResponseList = response.body();
-                    if (cartDetailResponseList != null){
-                        showCartNotification();
-                    }
+                    cartDetailList = response.body();
                     Log.d("Cart", "get cart successful");
                 }else {
                     Log.e("Cart", "get cart fail");
@@ -166,40 +197,60 @@ public class HomeActivity extends AppCompatActivity {
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "My Notification Channel";
-            String description = "Description for My Notification Channel";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel("my_channel_id", name, importance);
-            channel.setDescription(description);
-
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             if (notificationManager != null) {
                 notificationManager.createNotificationChannel(channel);
             }
         }
     }
-        // Các bước tạo thông báo ở đây, giống như trong code của bạn.
-    void showCartNotification() {
-        createNotificationChannel(); // Đảm bảo kênh thông báo đã được tạo
-        // Create an explicit intent for an Activity in your app
-        Intent intent = new Intent(this, CartActivity.class);
-        intent.putExtra("customerId", accountId);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-        // Set the intent that will fire when the user taps the notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "my_channel_id")
-                .setContentTitle("Your Cart")
-                .setContentText("Have Items")
-                .setSmallIcon(R.drawable.ic_cart_notification)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true); // Tự động đóng thông báo sau khi được ấn
 
-        Notification notification = builder.build();
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(getNotificationId(), notification);
+    public void createNotifications(){
+        cartDetailList.stream().forEach(cartDetail -> {
+
+            try {
+                bitmap = Picasso.get().load(cartDetail.getBookImage()).get();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Intent intent = new Intent(this, CartActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable("cartDetailList",(Serializable) cartDetailList);
+//            intent.putExtras(bundle);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "my_channel_id")
+                    .setSmallIcon(R.drawable.pngwing_com)
+                    .setContentTitle("Bạn đã thêm 1 sản phẩm vào giỏ hàng")
+                    .setContentText(cartDetail.getBookTitle() + " đã được thêm vào giỏ")
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
+                    .setLargeIcon(bitmap)
+                    .setStyle(new NotificationCompat.BigPictureStyle()
+                            .bigPicture(bitmap)
+                            .bigLargeIcon(null))
+                    .setTimeoutAfter(24 * 60 * 60 * 1000)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            showNotification(this ,cartDetail.getBookId(), builder);
+        });
+
     }
-    private int getNotificationId(){
-        return (int) new Date().getTime();
+
+    public static void showNotification(Context context,int notification_id, NotificationCompat.Builder builder){
+        if(ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions((Activity) context,
+                    new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+        }else{
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+            notificationManager.notify(notification_id, builder.build());
+        }
+
     }
+
     private void showToast(String message) {
         Toast.makeText(HomeActivity.this, message, Toast.LENGTH_SHORT).show();
     }
