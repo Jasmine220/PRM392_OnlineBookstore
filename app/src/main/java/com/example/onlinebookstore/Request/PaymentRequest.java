@@ -1,10 +1,10 @@
 package com.example.onlinebookstore.Request;
 
 public class PaymentRequest {
-    private float amount;
+    private double amount;
     private String vnp_IpAddr;
 
-    public float getAmount() {
+    public double getAmount() {
         return amount;
     }
 
@@ -20,7 +20,9 @@ public class PaymentRequest {
         this.vnp_IpAddr = vnp_IpAddr;
     }
 
-    public PaymentRequest(float amount, String vnp_IpAddr) {
+
+
+    public PaymentRequest(double amount, String vnp_IpAddr) {
         this.amount = amount;
         this.vnp_IpAddr = vnp_IpAddr;
     }

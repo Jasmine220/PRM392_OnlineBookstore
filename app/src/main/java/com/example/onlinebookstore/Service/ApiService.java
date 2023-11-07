@@ -1,8 +1,9 @@
 package com.example.onlinebookstore.Service;
 
 import com.example.onlinebookstore.Models.Account;
+import com.example.onlinebookstore.Models.Order;
 import com.example.onlinebookstore.Request.LoginRequest;
-import com.example.onlinebookstore.Request.PaymentRequest;
+import com.example.onlinebookstore.Request.OrderRequest;
 import com.example.onlinebookstore.Request.RegisterRequest;
 import com.example.onlinebookstore.Response.LoginResponse;
 import com.example.onlinebookstore.Response.PaymentInforResponse;
@@ -25,11 +26,13 @@ public interface ApiService {
     @GET("list")
     Call<List<Account>> getAllAccounts();
     @POST("api/payment/create_payment")
-    Call<PaymentResponse> createPayment(@Query("amount") float amount, @Query("vnp_IpAddr") String vnp_IpAddr);
+    Call<PaymentResponse> createPayment(@Query("amount") double amount, @Query("vnp_IpAddr") String vnp_IpAddr);
 
     @GET("api/payment/payment_information")
     Call<PaymentInforResponse> getPaymentInfo(@Query("vnp_Amount") String amount,
                                               @Query("vnp_BankCode") String bankCode,
                                               @Query("vnp_OrderInfo") String orderInfo,
                                               @Query("vnp_ResponseCode") String responseCode);
+    @POST("api/v1/order/")
+    Call<Order> createOrder(@Body OrderRequest order);
 }
