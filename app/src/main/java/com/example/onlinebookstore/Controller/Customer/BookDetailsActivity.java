@@ -110,8 +110,7 @@ public class BookDetailsActivity extends AppCompatActivity {
         category.setText(category_name);
         quantity.setText(book_quantity);
 
-        getCart();
-        addCount = 0;
+
         Executor executor = Executors.newSingleThreadExecutor();
         createNotificationChannel();
         addToCart.setOnClickListener(new View.OnClickListener() {
@@ -129,9 +128,20 @@ public class BookDetailsActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        addCount = 0;
+        getCart();
+        super.onStart();
+    }
+
+
+    @Override
     protected void onPause() {
-        if(!isAddToCart())
-            addToCart();
+        if(addCount > 0){
+            if(!isAddToCart())
+                addToCart();
+
+        }
         super.onPause();
     }
 
