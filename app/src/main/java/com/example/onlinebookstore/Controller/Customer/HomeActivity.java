@@ -18,6 +18,7 @@ import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -43,6 +44,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,17 +60,18 @@ public class HomeActivity extends AppCompatActivity {
     private int accountId;
     List<CartDetailResponse> cartDetailList;
     Bitmap bitmap;
-    Boolean isNotify = false;
+    Boolean isNotify;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null){
-            isNotify = savedInstanceState.getBoolean("isNotify");
+        setContentView(R.layout.activity_home);
+
+        if(getIntent() != null){
+            accountId = getIntent().getIntExtra("accountId", 0);
+            isNotify = getIntent().getBooleanExtra("isNotify", false);
         }
 
-        setContentView(R.layout.activity_home);
-        Intent intent = getIntent();
-        accountId = intent.getIntExtra("accountId", 0);
         populateBooks();
         books = new ArrayList<>();
         rv_bookList = findViewById(R.id.rv_bookList);
@@ -75,25 +79,18 @@ public class HomeActivity extends AppCompatActivity {
         rvBookListAdapter = new BookListAdapter(HomeActivity.this, books,accountId);
         rv_bookList.setAdapter(rvBookListAdapter);
 
-        getCart();
-    }
-
-    @Override
-    protected void onStart() {
         if(!isNotify){
             createNotificationChannel();
-            createNotifications();
+            getCart();
         }
 
-        super.onStart();
+
 
     }
 
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putBoolean("isNotify", true);
-        super.onSaveInstanceState(outState);
-    }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -181,6 +178,11 @@ public class HomeActivity extends AppCompatActivity {
             public void onResponse(Call<List<CartDetailResponse>> call, Response<List<CartDetailResponse>> response) {
                 if(response.isSuccessful()){
                     cartDetailList = response.body();
+                    Executor executor = Executors.newSingleThreadExecutor();
+                    executor.execute(() -> {
+                        createNotifications();
+                    });
+
                     Log.d("Cart", "get cart successful");
                 }else {
                     Log.e("Cart", "get cart fail");
@@ -206,6 +208,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+
     public void createNotifications(){
         cartDetailList.stream().forEach(cartDetail -> {
 
@@ -215,15 +218,13 @@ public class HomeActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
             Intent intent = new Intent(this, CartActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("cartDetailList",(Serializable) cartDetailList);
-//            intent.putExtras(bundle);
+            intent.putExtra("customerId",(Integer) accountId);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "my_channel_id")
                     .setSmallIcon(R.drawable.pngwing_com)
-                    .setContentTitle("Bạn đã thêm 1 sản phẩm vào giỏ hàng")
+                    .setContentTitle("Bạn đã thêm sản phẩm vào giỏ hàng")
                     .setContentText(cartDetail.getBookTitle() + " đã được thêm vào giỏ")
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
@@ -239,7 +240,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    public static void showNotification(Context context,int notification_id, NotificationCompat.Builder builder){
+    public void showNotification(Context context,int notification_id, NotificationCompat.Builder builder){
         if(ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
                 != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions((Activity) context,

@@ -4,8 +4,21 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -19,14 +32,18 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.onlinebookstore.Client.ApiClient;
+import com.example.onlinebookstore.Models.Book;
 import com.example.onlinebookstore.Models.CartDetail;
 import com.example.onlinebookstore.R;
 import com.example.onlinebookstore.Request.CartDetailRequest;
 import com.example.onlinebookstore.Response.CartDetailResponse;
 import com.example.onlinebookstore.Service.ApiService;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +57,7 @@ public class BookDetailsActivity extends AppCompatActivity {
     List<CartDetailResponse> cartDetailResponseList;
     boolean check = false;
     int addCount;
-    HomeActivity activity = new HomeActivity();
+    Bitmap bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +95,8 @@ public class BookDetailsActivity extends AppCompatActivity {
         TextView publisher = findViewById(R.id.publisher_name);
         TextView category = findViewById(R.id.category_name);
         TextView quantity = findViewById(R.id.book_quantity);
+        Button addToCart = findViewById(R.id.add_to_cart);
+
         titleTextView.setText(title);
         authorTextView.setText(author);
         priceTextView.setText(price);
@@ -90,16 +109,20 @@ public class BookDetailsActivity extends AppCompatActivity {
         publisher.setText(publisher_name);
         category.setText(category_name);
         quantity.setText(book_quantity);
+
         getCart();
-        // Trong phương thức onClick của nút "Add to Cart"
-        Button addToCart = findViewById(R.id.add_to_cart);
         addCount = 0;
+        Executor executor = Executors.newSingleThreadExecutor();
+        createNotificationChannel();
         addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addCount++;
-//                activity.createNotifications();
                 showToast("Add successfully!");
+                executor.execute(() -> {
+                    createNotification(imageUrl, title,Integer.valueOf(book_id) );
+                });
+
             }
         });
 
@@ -228,5 +251,55 @@ public class BookDetailsActivity extends AppCompatActivity {
     }
     private void showToast(String message) {
         Toast.makeText(BookDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "My Notification Channel";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("my_channel_id", name, importance);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+    }
+
+    public void createNotification(String imageUrl, String bookTitle, int bookId){
+        try {
+            bitmap = Picasso.get().load(imageUrl).get();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Intent intent = new Intent(this, CartActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "my_channel_id")
+                .setSmallIcon(R.drawable.pngwing_com)
+                .setContentTitle("Bạn đã thêm sản phẩm vào giỏ hàng")
+                .setContentText(bookTitle + " đã được thêm vào giỏ")
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setLargeIcon(bitmap)
+                .setStyle(new NotificationCompat.BigPictureStyle()
+                        .bigPicture(bitmap)
+                        .bigLargeIcon(null))
+                .setTimeoutAfter(24 * 60 * 60 * 1000)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        showNotification(this ,bookId, builder);
+    }
+
+    public static void showNotification(Context context, int notification_id, NotificationCompat.Builder builder){
+        if(ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions((Activity) context,
+                    new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+        }else{
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+            notificationManager.notify(notification_id, builder.build());
+        }
+
     }
 }
