@@ -26,13 +26,9 @@
 
             <!-- Đây là nơi bạn có thể đặt các phần tử giao diện cho mỗi tin nhắn, chẳng hạn như hình ảnh, ngày giờ và nội dung tin nhắn. -->
             <!-- Ví dụ: -->
-            <ImageView
-                android:id="@+id/imageViewSenderAvatar"
-                android:layout_width="62dp"
-                android:layout_height="59dp"
-                android:src="@drawable/ic_launcher_foreground" />
 
             <LinearLayout
+                android:id="@+id/layout_chat"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -47,7 +43,6 @@
                     android:id="@+id/textViewMessageTimestamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
                     android:layout_marginTop="20dp" />
 
             </LinearLayout>
