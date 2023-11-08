@@ -1,11 +1,17 @@
 package com.example.onlinebookstore.Controller.Customer;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,7 +80,10 @@ public class ChatActivity extends AppCompatActivity {
 
         editTextMessage = findViewById(R.id.editTextMessage);
         Button buttonSend = findViewById(R.id.buttonSend);
+        ActionBar actionBar = getSupportActionBar();
 
+        // showing the back button in action bar
+        actionBar.setDisplayHomeAsUpEnabled(true);
         // Khởi tạo kết nối Socket.io
 
 
@@ -222,5 +231,35 @@ public class ChatActivity extends AppCompatActivity {
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.bottom_nav_menu,menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        int id = item.getItemId();
+        if (id == R.id.navigation_cart){
+            Intent intent = new Intent(ChatActivity.this, CartActivity.class);
+            intent.putExtra("customerId", customerId);
+            startActivity(intent);
+        }
+        if (id == R.id.navigation_map){
+            Intent intent = new Intent(ChatActivity.this, MapActivity.class);
+            startActivity(intent);
+        }
+        if (id == R.id.navigation_home){
+            Intent intent = new Intent(ChatActivity.this, HomeActivity.class);
+            intent.putExtra("accountId", customerId);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

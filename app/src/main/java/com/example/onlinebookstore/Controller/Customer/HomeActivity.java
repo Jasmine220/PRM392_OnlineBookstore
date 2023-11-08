@@ -97,6 +97,10 @@ public class HomeActivity extends AppCompatActivity {
             intent.putExtra("customerId", accountId);
             startActivity(intent);
         }
+        if (id == R.id.navigation_map){
+            Intent intent = new Intent(HomeActivity.this, MapActivity.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
