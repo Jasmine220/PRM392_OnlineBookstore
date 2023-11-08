@@ -113,7 +113,9 @@ public class CartActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            Intent intent = new Intent(CartActivity.this, HomeActivity.class);
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.putExtra("accountId", customerId);
+            intent.putExtra("isNotify", true);
             startActivity(intent);
             return true;
         }
