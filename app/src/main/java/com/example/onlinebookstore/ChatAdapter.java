@@ -45,6 +45,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         } else {
             // Đây là tin nhắn từ Customer (người gửi), đặt màu nền mặc định (xanh)
             holder.layout.setBackgroundResource(R.drawable.customer_background);
+            holder.linearLayout.setGravity(Gravity.START);
+            holder.frameLayout.setGravity(Gravity.START);
         }
         holder.textViewMessageContent.setText(message.getMessageContent());
         holder.textViewDateTime.setText(message.getMessageDatetime().toString());

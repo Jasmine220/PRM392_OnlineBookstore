@@ -46,7 +46,7 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedIntanceState);
         setContentView(R.layout.activity_cart);
 
-//        toolbar = findViewById(R.id.toolbar);
+
         checkAllBox = findViewById(R.id.checkBox);
         recyclerView = findViewById(R.id.recycleView);
         totalPaymentView = findViewById(R.id.totalPaymentView);
@@ -57,8 +57,7 @@ public class CartActivity extends AppCompatActivity {
 
         // showing the back button in action bar
         actionBar.setDisplayHomeAsUpEnabled(true);
-//        toolbar.setTitle("Bakasa");
-//        setSupportActionBar(toolbar);
+
         if (getIntent() != null) {
             customerId = getIntent().getIntExtra("customerId", 0);
         }
@@ -113,7 +112,9 @@ public class CartActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            Intent intent = new Intent(CartActivity.this, HomeActivity.class);
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.putExtra("accountId", customerId);
+            intent.putExtra("isNotify", true);
             startActivity(intent);
             return true;
         }

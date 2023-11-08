@@ -45,7 +45,7 @@ public class ChatActivity extends AppCompatActivity {
     private Socket mSocket; // Đối tượng Socket.io
     {
         try {
-            mSocket = IO.socket("http://10.33.33.15:3000");
+            mSocket = IO.socket("http://192.168.0.3:3000");
             Log.i("Ngu", "" + mSocket);
             mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
