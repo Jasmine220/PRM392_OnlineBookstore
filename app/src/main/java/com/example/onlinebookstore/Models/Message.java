@@ -7,8 +7,16 @@ public class Message {
     private String messageContent;
     private Date messageDatetime;
     private int sellerId;
+    private String type;
 
-    // Các phương thức getter và setter ở đây
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+// Các phương thức getter và setter ở đây
 
 
     public Long getCustomerId() {

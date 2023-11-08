@@ -1,11 +1,17 @@
 package com.example.onlinebookstore.Controller.Customer;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,6 +47,13 @@ public class ChatActivity extends AppCompatActivity {
         try {
             mSocket = IO.socket("http://10.33.33.15:3000");
             Log.i("Ngu", "" + mSocket);
+            mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    // Khi kết nối đã thành công, bạn có thể gửi sự kiện "register" ở đây
+                    mSocket.emit("register", "Customer");
+                }
+            });
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -55,8 +68,6 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         customerId = getIntent().getIntExtra("customerId", 0);
-        int sellId = getIntent().getIntExtra("sellerId", 0);
-        if(sellId == 4) customerId = 2;
         Log.d("ChatActivity", "customerId: " + customerId);
         getChatMessages();
         recyclerView = findViewById(R.id.recyclerViewChat);
@@ -69,7 +80,10 @@ public class ChatActivity extends AppCompatActivity {
 
         editTextMessage = findViewById(R.id.editTextMessage);
         Button buttonSend = findViewById(R.id.buttonSend);
+        ActionBar actionBar = getSupportActionBar();
 
+        // showing the back button in action bar
+        actionBar.setDisplayHomeAsUpEnabled(true);
         // Khởi tạo kết nối Socket.io
 
 
@@ -85,6 +99,7 @@ public class ChatActivity extends AppCompatActivity {
                     message.setSellerId(sellerId);
                     message.setMessageContent(messageContent);
                     message.setMessageDatetime(new Date());
+                    message.setType("Customer"); // Đặt loại của tin nhắn thành "Customer"
 
                     // Gửi tin nhắn thông qua Socket.io
                     sendMessageToServer(message);
@@ -98,34 +113,42 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        // Lắng nghe tin nhắn từ Socket.io và hiển thị chúng trong RecyclerView
-//        mSocket.on("message", new Emitter.Listener() {
-//            @Override
-//            public void call(Object... args) {
-//                if (args.length > 0) {
-//                    try {
-//                        JSONObject data = (JSONObject) args[0];
-//                        Message receivedMessage = new Message();
-//                        receivedMessage.setCustomerId(data.getLong("customerId"));
-//                        receivedMessage.setSellerId(data.getInt("sellerId"));
-//                        receivedMessage.setMessageContent(data.getString("messageContent"));
-//                        receivedMessage.setMessageDatetime(new Date(data.getLong("messageDatetime")));
-//
-//                        // Hiển thị tin nhắn nhận được trong RecyclerView
-//                        Log.d("SocketTest", "Received message: " + receivedMessage.getMessageContent());
-//                        runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                messages.add(receivedMessage);
-//                                chatAdapter.notifyDataSetChanged();
-//                            }
-//                        });
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        });
+// Lắng nghe tin nhắn từ Socket.io và hiển thị chúng trong RecyclerView
+        mSocket.on("message", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                if (args.length > 0) {
+                    try {
+                        JSONObject data = (JSONObject) args[0];
+                        long receivedCustomerId = data.getLong("customerId");
+                        int receivedSellerId = data.getInt("sellerId");
+                        String type = data.getString("type"); // Lấy loại của tin nhắn
+
+                        // Kiểm tra xem tin nhắn có được gửi từ Seller hoặc Customer khác
+                        if (!type.equals("Customer") && receivedCustomerId == customerId) {
+                            // Tin nhắn được gửi từ người khác
+                            Message receivedMessage = new Message();
+                            receivedMessage.setCustomerId(receivedCustomerId);
+                            receivedMessage.setSellerId(receivedSellerId);
+                            receivedMessage.setMessageContent(data.getString("messageContent"));
+                            receivedMessage.setMessageDatetime(new Date(data.getLong("messageDatetime")));
+                            receivedMessage.setType(type);
+                            // Hiển thị tin nhắn nhận được trong RecyclerView
+                            Log.d("SocketTest", "Received message: " + receivedMessage.getMessageContent());
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    messages.add(receivedMessage);
+                                    chatAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
         mSocket.connect();
     }
 
@@ -136,6 +159,7 @@ public class ChatActivity extends AppCompatActivity {
             data.put("sellerId", message.getSellerId());
             data.put("messageContent", message.getMessageContent());
             data.put("messageDatetime", message.getMessageDatetime().getTime());
+            data.put("type", "Customer");
             Log.d("SocketTest", "Sending message: " + message.getMessageContent());
             mSocket.emit("sendMessage", data);
             saveMessageToServer(message);
@@ -150,6 +174,7 @@ public class ChatActivity extends AppCompatActivity {
         messageWithoutDatetime.setCustomerId(message.getCustomerId());
         messageWithoutDatetime.setSellerId(message.getSellerId());
         messageWithoutDatetime.setMessageContent(message.getMessageContent());
+        messageWithoutDatetime.setType("Customer");
         // Sử dụng Retrofit để gọi API /send
         Call<Void> call = apiService.sendMessage(messageWithoutDatetime);
 
@@ -206,5 +231,35 @@ public class ChatActivity extends AppCompatActivity {
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.bottom_nav_menu,menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        int id = item.getItemId();
+        if (id == R.id.navigation_cart){
+            Intent intent = new Intent(ChatActivity.this, CartActivity.class);
+            intent.putExtra("customerId", customerId);
+            startActivity(intent);
+        }
+        if (id == R.id.navigation_map){
+            Intent intent = new Intent(ChatActivity.this, MapActivity.class);
+            startActivity(intent);
+        }
+        if (id == R.id.navigation_home){
+            Intent intent = new Intent(ChatActivity.this, HomeActivity.class);
+            intent.putExtra("accountId", customerId);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
