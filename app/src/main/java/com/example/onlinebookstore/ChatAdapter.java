@@ -38,11 +38,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         // Hiển thị thông tin của tin nhắn trong ViewHolder
         if (message.getType().equals("Seller")) {
             // Đây là tin nhắn từ Seller (người nhận), đặt màu cam
-            holder.frameLayout.setBackgroundResource(R.drawable.seller_background);
+            holder.layout.setBackgroundResource(R.drawable.seller_background);
             holder.linearLayout.setGravity(Gravity.END);
+            holder.frameLayout.setGravity(Gravity.END);
+
         } else {
             // Đây là tin nhắn từ Customer (người gửi), đặt màu nền mặc định (xanh)
-            holder.frameLayout.setBackgroundResource(R.drawable.customer_background);
+            holder.layout.setBackgroundResource(R.drawable.customer_background);
         }
         holder.textViewMessageContent.setText(message.getMessageContent());
         holder.textViewDateTime.setText(message.getMessageDatetime().toString());
@@ -58,13 +60,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     public class ChatViewHolder extends RecyclerView.ViewHolder {
         TextView textViewMessageContent;
         TextView textViewDateTime;
-        FrameLayout frameLayout;
+        LinearLayout frameLayout;
         LinearLayout linearLayout;
+        LinearLayout layout;
         // Thêm các phần tử giao diện khác tại đây
 
         public ChatViewHolder(@NonNull View itemView) {
             super(itemView);
             frameLayout = itemView.findViewById(R.id.frameLayoutMessage);
+            layout = itemView.findViewById(R.id.layout);
             linearLayout = itemView.findViewById(R.id.layout_chat);
             textViewMessageContent = itemView.findViewById(R.id.textViewMessageContent);
             textViewDateTime = itemView.findViewById(R.id.textViewMessageTimestamp);
