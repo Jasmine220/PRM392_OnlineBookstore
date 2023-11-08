@@ -1,9 +1,10 @@
 package com.example.onlinebookstore.Models;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Order {
+public class Order implements Serializable {
     private int orderId;
     private int paymentMethodId;
     private int sellerId;

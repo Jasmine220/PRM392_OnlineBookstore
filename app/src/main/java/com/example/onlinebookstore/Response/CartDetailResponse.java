@@ -66,4 +66,14 @@ public class CartDetailResponse implements Serializable {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+
+    public CartDetailResponse(long cartDetailId, int customerId, int bookId, String bookTitle, String bookImage, double bookPrice, int amount) {
+        this.cartDetailId = cartDetailId;
+        this.customerId = customerId;
+        this.bookId = bookId;
+        this.bookTitle = bookTitle;
+        this.bookImage = bookImage;
+        this.bookPrice = bookPrice;
+        this.amount = amount;
+    }
 }

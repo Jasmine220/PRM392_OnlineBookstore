@@ -40,12 +40,12 @@
         <activity
             android:name=".Controller.Customer.PaymentSuccessfulActivity"
             android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".Controller.Customer.PaymentActivity"-->
-<!--            android:exported="false" />-->
         <activity
-            android:name=".Controller.Customer.CartActivity"
-            android:exported="true" />
+            android:name=".Controller.Customer.PaymentActivity"
+            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".Controller.Customer.CartActivity"-->
+<!--            android:exported="true" />-->
         <activity
             android:name=".Controller.Customer.HomeActivity"
             android:exported="false" />
@@ -62,7 +62,7 @@
         <activity android:name=".Controller.Customer.BookDetailsActivity"
             android:exported="true"/>
         <activity
-            android:name=".Controller.Customer.PaymentActivity"
+            android:name=".Controller.Customer.CartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

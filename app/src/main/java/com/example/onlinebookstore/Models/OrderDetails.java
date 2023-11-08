@@ -1,6 +1,8 @@
 package com.example.onlinebookstore.Models;
 
-public class OrderDetails {
+import java.io.Serializable;
+
+public class OrderDetails implements Serializable {
     private int orderDetailsId;
     private int orderId;
     private int bookId;

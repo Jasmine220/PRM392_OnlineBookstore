@@ -48,7 +48,7 @@
                 android:text="Title book" />
 
             <TextView
-                android:id="@+id/tv_amount"
+                android:id="@+id/tv_quantity"
                 style="@style/TextViewLighter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
