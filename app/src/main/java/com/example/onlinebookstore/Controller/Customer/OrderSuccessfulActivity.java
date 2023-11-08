@@ -26,7 +26,13 @@ public class OrderSuccessfulActivity extends AppCompatActivity {
         btnReturnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle bundle = getIntent().getExtras();
+                int accountId = bundle.getInt("accountId");
+
                 Intent intent = new Intent(OrderSuccessfulActivity.this, HomeActivity.class);
+                Bundle bundle2 = new Bundle();
+                bundle2.putInt("accountId", accountId);
+                intent.putExtras(bundle2);
                 startActivity(intent);
             }
         });

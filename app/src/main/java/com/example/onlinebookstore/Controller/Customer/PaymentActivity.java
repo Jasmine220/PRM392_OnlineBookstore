@@ -196,6 +196,7 @@ public class PaymentActivity extends AppCompatActivity {
                                     Bundle bundle = new Bundle();
                                     System.out.println("ORDER_RESPONSE: " + orderResponse);
                                     bundle.putInt("orderId", orderResponse.getOrderId());
+                                    bundle.putInt("accountId", orderResponse.getCustomerId());
                                     intent.putExtras(bundle);
                                     startActivity(intent);
                                 }
