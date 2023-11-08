@@ -9,9 +9,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
     // Đường dẫn cơ sở của API của bạnlocalhost
-//    private static final String BASE_URL = "http://192.168.1.9:8080/";
+    private static final String BASE_URL = "http://192.168.1.9:8080/";
 //    private static final String BASE_URL = "http://10.15.180.143:8080/";
-    private static final String BASE_URL = "http://10.33.30.177:8080/";
+//    private static final String BASE_URL = "http://10.33.30.177:8080/";
 //    private static final String BASE_URL = "http://192.168.43.183:8080/";
 
     private static final OkHttpClient builder = new OkHttpClient.Builder()

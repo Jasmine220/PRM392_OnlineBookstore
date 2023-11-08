@@ -7,10 +7,12 @@ import com.example.onlinebookstore.Models.Order;
 import com.example.onlinebookstore.Models.Book;
 import com.example.onlinebookstore.Models.CartDetail;
 import com.example.onlinebookstore.Request.CartDetailRequest;
+import com.example.onlinebookstore.Request.CustomerRequest;
 import com.example.onlinebookstore.Request.LoginRequest;
 import com.example.onlinebookstore.Request.OrderRequest;
 import com.example.onlinebookstore.Request.RegisterRequest;
 import com.example.onlinebookstore.Response.CartDetailResponse;
+import com.example.onlinebookstore.Response.CustomerResponse;
 import com.example.onlinebookstore.Response.LoginResponse;
 import com.example.onlinebookstore.Response.PaymentInforResponse;
 import com.example.onlinebookstore.Response.PaymentResponse;
@@ -35,7 +37,7 @@ public interface ApiService {
     @GET("list")
     Call<List<Account>> getAllAccounts();
     @POST("api/payment/create_payment")
-    Call<PaymentResponse> createPayment(@Query("amount") double amount, @Query("vnp_IpAddr") String vnp_IpAddr);
+    Call<PaymentResponse> createPayment(@Query("amount") double amount, @Query("vnp_IpAddr") String vnp_IpAddr, @Query("orderId") int orderId);
 
     @GET("api/payment/payment_information")
     Call<PaymentInforResponse> getPaymentInfo(@Query("vnp_Amount") String amount,
@@ -65,5 +67,10 @@ public interface ApiService {
     Call<CartDetail> createCartDetail(@Body CartDetailRequest request);
     @DELETE("api/v1/cart-detail/")
     Call<Void> deleteCartDetail(@Query("cartDetailId") long cartDetailId);
+    @GET("customer/info/")
+    Call<Customer> getCustomerById(@Query("customerId") int customerId);
+
+    @GET("account/info/")
+    Call<Account> getAccountById(@Query("accountId") int accountId);
 
 }

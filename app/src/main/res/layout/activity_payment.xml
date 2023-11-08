@@ -98,7 +98,7 @@
                         android:inputType="text"
                        android:textStyle="bold"
                         android:hint="Nhập địa chỉ"
-                        android:text="Name" />
+                        />
 
                     <ImageButton
                         android:id="@+id/imageButton3"
@@ -131,20 +131,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <RadioButton
+                            android:id="@+id/rd_shipping_method_normal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/TextViewsmall"
+                            android:text="Giao hàng tiết kiệm" />
 
-                    <RadioButton
-                        android:id="@+id/rd_shipping_method_normal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/TextViewsmall"
-                        android:text="Giao hàng tiết kiệm" />
+                        <RadioButton
+                            android:id="@+id/rd_shipping_method_fast"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/TextViewsmall"
+                            android:text="Giao hàng hỏa tốc" />
+                    </RadioGroup>
 
-                    <RadioButton
-                        android:id="@+id/rd_shipping_method_fast"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/TextViewsmall"
-                        android:text="Giao hàng hỏa tốc" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -162,20 +166,24 @@
                 android:layout_height="83dp"
                 android:layout_marginHorizontal="10dp"
                 android:orientation="vertical">
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <RadioButton
+                        android:id="@+id/rd_payment_method_direct"
+                        style="@style/TextViewsmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Thanh toán tiền mặt" />
 
-                <RadioButton
-                    android:id="@+id/rd_payment_method_direct"
-                    style="@style/TextViewsmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Thanh toán tiền mặt" />
+                    <RadioButton
+                        android:id="@+id/rd_payment_method_vnpay"
+                        style="@style/TextViewsmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Thanh toán bằng VNPay" />
+                </RadioGroup>
 
-                <RadioButton
-                    android:id="@+id/rd_payment_method_vnpay"
-                    style="@style/TextViewsmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Thanh toán bằng VNPay" />
 
             </LinearLayout>
 
