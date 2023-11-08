@@ -224,6 +224,15 @@ public class BookDetailsActivity extends AppCompatActivity {
             intent.putExtra("customerId", accountId);
             startActivity(intent);
         }
+        if (id == R.id.navigation_map){
+            Intent intent = new Intent(BookDetailsActivity.this, MapActivity.class);
+            startActivity(intent);
+        }
+        if (id == R.id.navigation_home){
+            Intent intent = new Intent(BookDetailsActivity.this, HomeActivity.class);
+            intent.putExtra("accountId", accountId);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
     private void showToast(String message) {

@@ -8,9 +8,9 @@
         />
 
     <item
-        android:id="@+id/navigation_person"
+        android:id="@+id/navigation_map"
         android:icon="@drawable/baseline_person_2_24"
-        android:title="Tài khoản" />
+        android:title="Map" />
 
     <item
         android:id="@+id/navigation_chat"
