@@ -129,11 +129,12 @@ public class BookDetailsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
         if(!isAddToCart())
             addToCart();
+        super.onPause();
     }
+
 
     private void addToCart(){
 

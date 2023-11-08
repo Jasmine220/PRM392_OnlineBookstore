@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name = "android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name = "android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -24,34 +24,31 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
+
             android:name=".Controller.Customer.ChatActivity"
-            android:exported="false" />
+            android:exported="true"/>
         <activity
             android:name=".Controller.Customer.MapActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Controller.Customer.OrderDetailsActivity"
             android:exported="true" >
 
         </activity>
+
+        <activity
+            android:name=".Controller.Customer.OrderDetailsActivity"
+            android:exported="false" />
         <activity
             android:name=".Controller.Customer.PaymentSuccessfulActivity"
             android:exported="false" />
         <activity
             android:name=".Controller.Customer.PaymentActivity"
             android:exported="false" />
+
         <activity
             android:name=".Controller.Customer.CartActivity"
             android:exported="false" />
         <activity
-            android:name=".Controller.Customer.LoginActivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name=".Controller.Customer.HomeActivity"
+            android:exported="false" />
         <activity
             android:name=".Controller.Customer.RegisterActivity"
             android:exported="false" />
@@ -63,11 +60,15 @@
             android:exported="true"
             />
         <activity android:name=".Controller.Customer.BookDetailsActivity"
-            android:exported="true">
-    </activity>
+            android:exported="true"/>
         <activity
-            android:name=".Controller.Customer.HomeActivity"
+            android:name=".Controller.Customer.LoginActivity"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
