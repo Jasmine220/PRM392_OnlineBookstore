@@ -154,7 +154,7 @@ public class PaymentActivity extends AppCompatActivity {
                 //CREATE ORDER
                 List<OrderDetailsRequest> detailDTOList = new ArrayList<>();
                 for (int i = 0; i < cartDetailsList.size(); i++) {
-                    detailDTOList.add(new OrderDetailsRequest(cartDetailsList.get(i).getBookId(), cartDetailsList.get(i).getAmount()));
+                    detailDTOList.add(new OrderDetailsRequest(cartDetailsList.get(i).getBookId(), cartDetailsList.get(i).getAmount(), (int) cartDetailsList.get(i).getCartDetailId()));
                 }
                 OrderRequest order = new OrderRequest(finalPaymentMethodId, finalCustomerId, finalShippingMethodId, address, detailDTOList);
                 Call<Order> callOrder = apiService.createOrder(order);

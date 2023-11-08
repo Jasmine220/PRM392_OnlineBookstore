@@ -3,6 +3,21 @@ package com.example.onlinebookstore.Request;
 public class OrderDetailsRequest {
     private int bookId;
     private int quantity;
+    private int cartDetailId;
+
+    public int getCartDetailId() {
+        return cartDetailId;
+    }
+
+    public OrderDetailsRequest(int bookId, int quantity, int cartDetailId) {
+        this.bookId = bookId;
+        this.quantity = quantity;
+        this.cartDetailId = cartDetailId;
+    }
+
+    public void setCartDetailId(int cartDetailId) {
+        this.cartDetailId = cartDetailId;
+    }
 
     public int getBookId() {
         return bookId;
