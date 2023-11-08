@@ -4,6 +4,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name = "android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name = "android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -29,15 +30,9 @@
         <activity
             android:name=".Controller.Customer.MapActivity"
             android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <activity
-            android:name=".Controller.Customer.NotificationActivity"
-            android:exported="false" />
+
         <activity
             android:name=".Controller.Customer.OrderDetailsActivity"
             android:exported="false" />
@@ -47,9 +42,7 @@
         <activity
             android:name=".Controller.Customer.PaymentActivity"
             android:exported="false" />
-        <activity
-            android:name=".Controller.Customer.ListBookActivity"
-            android:exported="false" />
+
         <activity
             android:name=".Controller.Customer.CartActivity"
             android:exported="false" />
@@ -71,7 +64,11 @@
         <activity
             android:name=".Controller.Customer.LoginActivity"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
