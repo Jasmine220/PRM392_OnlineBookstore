@@ -133,6 +133,11 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(HomeActivity.this, MapActivity.class);
             startActivity(intent);
         }
+        if (id == R.id.action_logout){
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
     public void populateBooks() {

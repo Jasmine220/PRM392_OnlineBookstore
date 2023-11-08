@@ -116,6 +116,7 @@ public class PaymentActivity extends AppCompatActivity {
         tvPriceTotal.setText("Tổng: " + String.valueOf(rawPrice + priceShipping));
         tvPriceTotalFinal.setText("Tổng: " + String.valueOf(rawPrice + priceShipping));
 
+
         apiService = ApiClient.getClient().create(ApiService.class); // Khởi tạo dịch vụ API
         //GET CUSTOMER INFO
         Call<Customer> callCustomer = apiService.getCustomerById(customerId);
@@ -135,7 +136,7 @@ public class PaymentActivity extends AppCompatActivity {
                 System.out.println("ERROR");
             }
         });
-        String address = tvAddressCustomer.getText().toString();
+
 
 
         cartDetailsAdapter = new CartDetailsAdapter(this, cartDetailsList);
@@ -151,6 +152,7 @@ public class PaymentActivity extends AppCompatActivity {
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String address = tvAddressCustomer.getText().toString();
                 //CREATE ORDER
                 List<OrderDetailsRequest> detailDTOList = new ArrayList<>();
                 for (int i = 0; i < cartDetailsList.size(); i++) {

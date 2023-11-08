@@ -257,6 +257,11 @@ public class BookDetailsActivity extends AppCompatActivity {
             intent.putExtra("accountId", accountId);
             startActivity(intent);
         }
+        if (id == R.id.action_logout){
+            Intent intent = new Intent(BookDetailsActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
     private void showToast(String message) {

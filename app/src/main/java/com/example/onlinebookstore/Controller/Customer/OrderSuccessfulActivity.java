@@ -17,18 +17,18 @@ public class OrderSuccessfulActivity extends AppCompatActivity {
 
     private Button btnReturnHome;
     private Button btnOrderDetails;
+    private int accountId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_successful);
         btnReturnHome = findViewById(R.id.btnReturnHome);
         btnOrderDetails = findViewById(R.id.btnOrderDetails);
+        Bundle bundle = getIntent().getExtras();
+        accountId = bundle.getInt("accountId");
         btnReturnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = getIntent().getExtras();
-                int accountId = bundle.getInt("accountId");
-
                 Intent intent = new Intent(OrderSuccessfulActivity.this, HomeActivity.class);
                 Bundle bundle2 = new Bundle();
                 bundle2.putInt("accountId", accountId);
@@ -48,8 +48,9 @@ public class OrderSuccessfulActivity extends AppCompatActivity {
                 }
                 Intent intent = new Intent(OrderSuccessfulActivity.this, OrderDetailsActivity.class);
                 Bundle bundle2 = new Bundle();
-                bundle.putInt("orderId", orderId);
-                intent.putExtras(bundle);
+                bundle2.putInt("orderId", orderId);
+                bundle2.putInt("accountId", accountId);
+                intent.putExtras(bundle2);
                 startActivity(intent);
             }
         });

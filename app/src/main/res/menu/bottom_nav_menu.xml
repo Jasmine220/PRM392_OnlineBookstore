@@ -26,4 +26,8 @@
         android:icon="@drawable/search"
         app:showAsAction="always"
         app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+    <item
+        android:id="@+id/action_logout"
+        android:title="Log out"
+        android:icon="@drawable/baseline_logout_24" />
 </menu>

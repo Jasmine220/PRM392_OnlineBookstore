@@ -41,6 +41,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
     RecyclerView orderDetailsRecyclerView;
     OrderItemAdapter orderItemAdapter;
     Button nextBuy;
+    private int orderId;
+    private int accountId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +54,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
         addressTextView = findViewById(R.id.textView11);
         orderTimeTextView = findViewById(R.id.textView12);
         totalTextView = findViewById(R.id.textView10);
+        orderId = getIntent().getIntExtra("orderId",0);
+        accountId = getIntent().getIntExtra("accountId", 0);
         nextBuy = findViewById(R.id.Button);
         // Khởi tạo Adapter và thiết lập cho RecyclerView
 
@@ -64,6 +68,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(OrderDetailsActivity.this, HomeActivity.class);
+                intent.putExtra("accountId", accountId);
                 startActivity(intent);
             }
         });
@@ -95,7 +100,6 @@ public class OrderDetailsActivity extends AppCompatActivity {
         });
     }
     private void fetchOrderDetails() {
-        int orderId = 7;
         Call<Order> call = apiService.getOrder(orderId);
         call.enqueue(new Callback<Order>() {
             @Override
