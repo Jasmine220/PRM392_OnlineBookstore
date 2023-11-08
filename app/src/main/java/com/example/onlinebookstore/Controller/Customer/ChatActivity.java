@@ -39,8 +39,15 @@ public class ChatActivity extends AppCompatActivity {
     private Socket mSocket; // Đối tượng Socket.io
     {
         try {
-            mSocket = IO.socket("http://192.168.0.3:3000");
+            mSocket = IO.socket("http://10.33.33.15:3000");
             Log.i("Ngu", "" + mSocket);
+            mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    // Khi kết nối đã thành công, bạn có thể gửi sự kiện "register" ở đây
+                    mSocket.emit("register", "Customer");
+                }
+            });
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -55,8 +62,6 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         customerId = getIntent().getIntExtra("customerId", 0);
-        int sellId = getIntent().getIntExtra("sellerId", 0);
-        if(sellId == 4) customerId = 2;
         Log.d("ChatActivity", "customerId: " + customerId);
         getChatMessages();
         recyclerView = findViewById(R.id.recyclerViewChat);
@@ -85,6 +90,7 @@ public class ChatActivity extends AppCompatActivity {
                     message.setSellerId(sellerId);
                     message.setMessageContent(messageContent);
                     message.setMessageDatetime(new Date());
+                    message.setType("Customer"); // Đặt loại của tin nhắn thành "Customer"
 
                     // Gửi tin nhắn thông qua Socket.io
                     sendMessageToServer(message);
@@ -98,34 +104,42 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        // Lắng nghe tin nhắn từ Socket.io và hiển thị chúng trong RecyclerView
-//        mSocket.on("message", new Emitter.Listener() {
-//            @Override
-//            public void call(Object... args) {
-//                if (args.length > 0) {
-//                    try {
-//                        JSONObject data = (JSONObject) args[0];
-//                        Message receivedMessage = new Message();
-//                        receivedMessage.setCustomerId(data.getLong("customerId"));
-//                        receivedMessage.setSellerId(data.getInt("sellerId"));
-//                        receivedMessage.setMessageContent(data.getString("messageContent"));
-//                        receivedMessage.setMessageDatetime(new Date(data.getLong("messageDatetime")));
-//
-//                        // Hiển thị tin nhắn nhận được trong RecyclerView
-//                        Log.d("SocketTest", "Received message: " + receivedMessage.getMessageContent());
-//                        runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                messages.add(receivedMessage);
-//                                chatAdapter.notifyDataSetChanged();
-//                            }
-//                        });
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        });
+// Lắng nghe tin nhắn từ Socket.io và hiển thị chúng trong RecyclerView
+        mSocket.on("message", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                if (args.length > 0) {
+                    try {
+                        JSONObject data = (JSONObject) args[0];
+                        long receivedCustomerId = data.getLong("customerId");
+                        int receivedSellerId = data.getInt("sellerId");
+                        String type = data.getString("type"); // Lấy loại của tin nhắn
+
+                        // Kiểm tra xem tin nhắn có được gửi từ Seller hoặc Customer khác
+                        if (!type.equals("Customer") && receivedCustomerId == customerId) {
+                            // Tin nhắn được gửi từ người khác
+                            Message receivedMessage = new Message();
+                            receivedMessage.setCustomerId(receivedCustomerId);
+                            receivedMessage.setSellerId(receivedSellerId);
+                            receivedMessage.setMessageContent(data.getString("messageContent"));
+                            receivedMessage.setMessageDatetime(new Date(data.getLong("messageDatetime")));
+                            receivedMessage.setType(type);
+                            // Hiển thị tin nhắn nhận được trong RecyclerView
+                            Log.d("SocketTest", "Received message: " + receivedMessage.getMessageContent());
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    messages.add(receivedMessage);
+                                    chatAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
         mSocket.connect();
     }
 
@@ -136,6 +150,7 @@ public class ChatActivity extends AppCompatActivity {
             data.put("sellerId", message.getSellerId());
             data.put("messageContent", message.getMessageContent());
             data.put("messageDatetime", message.getMessageDatetime().getTime());
+            data.put("type", "Customer");
             Log.d("SocketTest", "Sending message: " + message.getMessageContent());
             mSocket.emit("sendMessage", data);
             saveMessageToServer(message);
@@ -150,6 +165,7 @@ public class ChatActivity extends AppCompatActivity {
         messageWithoutDatetime.setCustomerId(message.getCustomerId());
         messageWithoutDatetime.setSellerId(message.getSellerId());
         messageWithoutDatetime.setMessageContent(message.getMessageContent());
+        messageWithoutDatetime.setType("Customer");
         // Sử dụng Retrofit để gọi API /send
         Call<Void> call = apiService.sendMessage(messageWithoutDatetime);
 

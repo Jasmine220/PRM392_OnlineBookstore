@@ -1,5 +1,6 @@
 package com.example.onlinebookstore.Controller.Customer;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +40,7 @@ public class BookDetailsActivity extends AppCompatActivity {
     List<CartDetailResponse> cartDetailResponseList;
     boolean check = false;
     int addCount;
+    HomeActivity activity = new HomeActivity();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +78,6 @@ public class BookDetailsActivity extends AppCompatActivity {
         TextView publisher = findViewById(R.id.publisher_name);
         TextView category = findViewById(R.id.category_name);
         TextView quantity = findViewById(R.id.book_quantity);
-
         titleTextView.setText(title);
         authorTextView.setText(author);
         priceTextView.setText(price);
@@ -89,7 +90,6 @@ public class BookDetailsActivity extends AppCompatActivity {
         publisher.setText(publisher_name);
         category.setText(category_name);
         quantity.setText(book_quantity);
-
         getCart();
         // Trong phương thức onClick của nút "Add to Cart"
         Button addToCart = findViewById(R.id.add_to_cart);
@@ -98,6 +98,7 @@ public class BookDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 addCount++;
+                activity.showCartNotification();
                 showToast("Add successfully!");
             }
         });

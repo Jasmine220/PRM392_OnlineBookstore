@@ -3,11 +3,14 @@ package com.example.onlinebookstore.Controller.Customer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -50,6 +53,10 @@ public class CartActivity extends AppCompatActivity {
         purchaseBtn = findViewById(R.id.purchaseButton);
         totalPaymentView.setText("Bạn chưa chọn sản phẩm nào để mua");
         purchaseBtn.setEnabled(false);
+        ActionBar actionBar = getSupportActionBar();
+
+        // showing the back button in action bar
+        actionBar.setDisplayHomeAsUpEnabled(true);
 //        toolbar.setTitle("Bakasa");
 //        setSupportActionBar(toolbar);
         if (getIntent() != null) {
@@ -102,6 +109,15 @@ public class CartActivity extends AppCompatActivity {
     }
 
 
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            Intent intent = new Intent(CartActivity.this, HomeActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }
