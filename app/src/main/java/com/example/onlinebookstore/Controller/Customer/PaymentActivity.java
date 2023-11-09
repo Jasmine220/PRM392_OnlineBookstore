@@ -153,7 +153,6 @@ public class PaymentActivity extends AppCompatActivity {
             public void onResponse(Call<Customer> call, Response<Customer> response) {
                 if(response.isSuccessful()){
                     Customer customerResponse = response.body();
-                    System.out.println("CUSTOMER_RESPONSE: " + customerResponse);
                     tvNameCustomer.setText(customerResponse.getCustomerName());
                     tvPhoneCustomer.setText(customerResponse.getCustomerPhone());
                 }
@@ -195,8 +194,6 @@ public class PaymentActivity extends AppCompatActivity {
                             if(response.isSuccessful()){
                                 Order orderResponse = response.body();
                                 double amount = orderResponse.getPrice();
-                                System.out.println("AMOUNT1: " + amount);
-                                System.out.println("ORDER_ID: " + orderResponse.getOrderId());
                                 //CREATE PAYMENT
                                 Call<PaymentResponse> callPayment = apiService.createPayment(amount, "10.33.30.177", orderResponse.getOrderId());
                                 if(rdPaymentMethodVNPay.isChecked() == true){
