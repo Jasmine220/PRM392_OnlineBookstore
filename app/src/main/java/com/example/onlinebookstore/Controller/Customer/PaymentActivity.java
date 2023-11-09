@@ -11,7 +11,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.onlinebookstore.Client.ApiClient;
 import com.example.onlinebookstore.Models.CartDetails;
@@ -55,6 +57,7 @@ public class PaymentActivity extends AppCompatActivity {
     private RecyclerView rcvCartDetails;
     private CartDetailsAdapter cartDetailsAdapter;
     ApiService apiService; // Đối tượng dịch vụ API
+    private RadioGroup radioGroupShipping;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,21 +88,23 @@ public class PaymentActivity extends AppCompatActivity {
         btnOrder = findViewById(R.id.btn_order);
         rcvCartDetails = findViewById(R.id.rcv_cart_details);
 
+
+
+        //GET CUSTOMER_ID AND CARTDETAILS LIST
         int customerId = 0;
         Bundle bundle = getIntent().getExtras();
         System.out.println("BUNDLE: " + bundle);
         if(bundle!= null){
             customerId = bundle.getInt("customerId");
             cartDetailsList = (ArrayList<CartDetailResponse>) bundle.get("cartDetailList");
-            System.out.println("CUSTOMERID: " + customerId);
-            System.out.println("LIST_CART_DETAILS: " + cartDetailsList.size());
         }
+        //SET VALUE
         double rawPrice = 0;
         double priceShipping = 0;
         int paymentMethodId = 1;
         int shippingMethodId = 1;
         for (int i = 0; i < cartDetailsList.size(); i++) {
-            rawPrice += cartDetailsList.get(i).getBookPrice();
+            rawPrice += (cartDetailsList.get(i).getBookPrice()*cartDetailsList.get(i).getAmount());
         }
         if(rdPaymentMethodVNPay.isChecked() == true){
             paymentMethodId = 2;
@@ -111,10 +116,33 @@ public class PaymentActivity extends AppCompatActivity {
         if(rdShippingMethodFast.isChecked() == true){
             shippingMethodId = 2;
         };
-        tvRawPrice.setText("Tạm tính: " + String.valueOf(rawPrice));
-        tvPriceShipping.setText("Phí vận chuyển: " + String.valueOf(priceShipping));
-        tvPriceTotal.setText("Tổng: " + String.valueOf(rawPrice + priceShipping));
-        tvPriceTotalFinal.setText("Tổng: " + String.valueOf(rawPrice + priceShipping));
+
+        //SET DEFAULT VALUE FOR TV_PRICE
+        tvPriceTotal.setText("Tổng: " + String.valueOf(rawPrice + 15000) + " đ");
+        tvPriceTotalFinal.setText("Tổng: " + String.valueOf(rawPrice + 15000) + " đ");
+        //CHECK EVENT RADIO BUTTONS
+        double finalRawPrice = rawPrice;
+        double finalRawPrice1 = rawPrice;
+        rdShippingMethodNormal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvPriceShipping.setText("Phí vận chuyển: " + "15000 đ");
+                tvPriceTotal.setText("Tổng: " + String.valueOf(finalRawPrice + 15000) + " đ");
+                tvPriceTotalFinal.setText("Tổng: " + String.valueOf(finalRawPrice1 + 15000) + " đ");
+            }
+        });
+        double finalRawPrice2 = rawPrice;
+        rdShippingMethodFast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvPriceShipping.setText("Phí vận chuyển: " + "18000 đ");
+                tvPriceTotal.setText("Tổng: " + String.valueOf(finalRawPrice + 18000) + " đ");
+                tvPriceTotalFinal.setText("Tổng: " + String.valueOf(finalRawPrice2 + 18000) + " đ");
+            }
+        });
+        tvRawPrice.setText("Tạm tính: " + String.valueOf(rawPrice) + " đ");
+
+
 
 
         apiService = ApiClient.getClient().create(ApiService.class); // Khởi tạo dịch vụ API
@@ -158,16 +186,17 @@ public class PaymentActivity extends AppCompatActivity {
                 for (int i = 0; i < cartDetailsList.size(); i++) {
                     detailDTOList.add(new OrderDetailsRequest(cartDetailsList.get(i).getBookId(), cartDetailsList.get(i).getAmount(), (int) cartDetailsList.get(i).getCartDetailId()));
                 }
-                OrderRequest order = new OrderRequest(finalPaymentMethodId, finalCustomerId, finalShippingMethodId, address, detailDTOList);
-                Call<Order> callOrder = apiService.createOrder(order);
-                callOrder.enqueue(new Callback<Order>() {
-                    @Override
-                    public void onResponse(Call<Order> callOrder, Response<Order> response) {
-                        if(response.isSuccessful()){
-                            Order orderResponse = response.body();
-                            double amount = orderResponse.getPrice();
-                            System.out.println("AMOUNT1: " + amount);
-                            System.out.println("ORDER_ID: " + orderResponse.getOrderId());
+                if(address != null && address.length() != 0){
+                    OrderRequest order = new OrderRequest(finalPaymentMethodId, finalCustomerId, finalShippingMethodId, address, detailDTOList);
+                    Call<Order> callOrder = apiService.createOrder(order);
+                    callOrder.enqueue(new Callback<Order>() {
+                        @Override
+                        public void onResponse(Call<Order> callOrder, Response<Order> response) {
+                            if(response.isSuccessful()){
+                                Order orderResponse = response.body();
+                                double amount = orderResponse.getPrice();
+                                System.out.println("AMOUNT1: " + amount);
+                                System.out.println("ORDER_ID: " + orderResponse.getOrderId());
                                 //CREATE PAYMENT
                                 Call<PaymentResponse> callPayment = apiService.createPayment(amount, "10.33.30.177", orderResponse.getOrderId());
                                 if(rdPaymentMethodVNPay.isChecked() == true){
@@ -207,11 +236,16 @@ public class PaymentActivity extends AppCompatActivity {
                         }
 
 
-                    @Override
-                    public void onFailure(Call<Order> call, Throwable t) {
-                        System.out.println("CREATE ORDER ERROR");
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<Order> call, Throwable t) {
+                            System.out.println("CREATE ORDER ERROR");
+                        }
+                    });
+                }
+                else{
+                    Toast.makeText(PaymentActivity.this, "Địa chỉ không được để trống !", Toast.LENGTH_SHORT).show();
+                }
+
 
 
             }

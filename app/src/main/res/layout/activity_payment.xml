@@ -131,21 +131,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
                     <RadioGroup
+                        android:id="@+id/radioGroupShipping"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:checkedButton="@id/rd_shipping_method_normal">
+
                         <RadioButton
                             android:id="@+id/rd_shipping_method_normal"
+                            style="@style/TextViewsmall"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            style="@style/TextViewsmall"
                             android:text="Giao hàng tiết kiệm" />
 
                         <RadioButton
                             android:id="@+id/rd_shipping_method_fast"
+                            style="@style/TextViewsmall"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            style="@style/TextViewsmall"
                             android:text="Giao hàng hỏa tốc" />
                     </RadioGroup>
 
@@ -168,6 +172,7 @@
                 android:orientation="vertical">
                 <RadioGroup
                     android:layout_width="wrap_content"
+                    android:checkedButton="@id/rd_payment_method_direct"
                     android:layout_height="wrap_content">
                     <RadioButton
                         android:id="@+id/rd_payment_method_direct"
@@ -220,7 +225,7 @@
                     android:layout_height="wrap_content"
                     style="@style/TextView"
 
-                    android:text="phi van chuyen" />
+                    android:text="Phí vận chuyển: 15000 đ" />
 
                 <TextView
                     android:id="@+id/tv_price_total"
