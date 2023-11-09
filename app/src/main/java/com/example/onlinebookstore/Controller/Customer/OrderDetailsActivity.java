@@ -83,11 +83,12 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     booksList = response.body();
                     Log.d("book", "booklist" + booksList);
-                    // Sau khi lấy danh sách sách, bạn có thể gọi fetchOrderDetails để lấy thông tin đơn hàng
-                    orderItemAdapter = new OrderItemAdapter(OrderDetailsActivity.this,booksList); // Sử dụng danh sách trống ban đầu, sẽ cập nhật sau khi lấy dữ liệu
+
+                    orderItemAdapter = new OrderItemAdapter(OrderDetailsActivity.this,booksList);
                     orderDetailsRecyclerView = findViewById(R.id.order_recycler);
                     orderDetailsRecyclerView.setAdapter(orderItemAdapter);
                     orderDetailsRecyclerView.setLayoutManager(new LinearLayoutManager(OrderDetailsActivity.this));
+                    // Sau khi lấy danh sách sách, gọi fetchOrderDetails để lấy thông tin đơn hàng
                     fetchOrderDetails();
                 }
             }
@@ -118,7 +119,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
                         status = "Đã thanh toán";
                         view3.setVisibility(View.VISIBLE);
                     }
-                    if (order.getAddress() == null){
+                    if (order.getAddress() == null || order.getAddress() == ""){
                         address = "Chưa có địa chỉ";
                     }
                     // Kiểm tra xem danh sách có phần tử không
